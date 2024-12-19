@@ -1,6 +1,6 @@
 package com.tecProject.tec.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -22,37 +22,38 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "USER")
-public class User {
+@Table(name = "USER_SUPPORT")
+public class UserSupport {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "USER_NO")
-	private int userNo;
+	@Column(name = "INQUIRY_NO", nullable = false)
+	private int inquiryNo;
 	
-	@Column(name = "USER_TYPE", nullable = false)
-	private int userType;
-	
-	@Column(name = "USER_ID", nullable = false, unique = true, length = 50)
+	@Column(name = "USER_ID", nullable = false, length = 12)
 	private String userId;
 	
-	@Column(name = "USER_PWD", nullable = false, length = 255)
-	private String userPwd;
+	@Column(name = "TYPE", nullable = false)
+	private int type;
 	
-	@Column(name = "USER_NAME", nullable = false, length = 50)
-	private String userName;
+	@Column(name = "TITLE", nullable = false, length = 100)
+	private String title;
 	
-	@Column(name = "EMAIL", nullable = false, unique = true, length = 100)
-	private String email;
+	@Column(name = "INQUIRY", nullable = false, length = 4000)
+	private String inquiry;
 	
-	@Column(name = "PHONE", length = 20)
-	private String phone;
-	
-	@Column(name = "CREATE_DATE", nullable = false)
+	@Column(name = "CREATED_DATE", nullable = false, updatable = false)
 	@CreatedDate
-	private LocalDateTime createDate;
+	private LocalDate createdDate;
 	
-	@Column(name = "CHANGE_PW_DATE")
+	@Column(name = "MODIFIED_DATE", nullable = false)
 	@LastModifiedDate
-	private LocalDateTime changePwDate;
+	private LocalDate modifiedDate;
+	
+	@Column(name = "IS_DELETED", nullable = false, length = 2)
+	private String isDeleted;
+	
+	@Column(name = "DELETED_DATE")
+	@LastModifiedDate
+	private LocalDate deletedDate;
 }
