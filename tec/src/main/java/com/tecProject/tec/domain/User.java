@@ -55,5 +55,4 @@ public class User {
 	@Column(name = "CHANGE_PW_DATE")
 	@LastModifiedDate
 	private LocalDateTime changePwDate;
-	
 }
