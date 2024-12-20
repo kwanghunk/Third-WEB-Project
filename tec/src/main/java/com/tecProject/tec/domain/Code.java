@@ -21,7 +21,7 @@ public class Code {
 		
 		//번역요청 ID
 		@Column(name = "USER_ID", length = 30)
-	    private String userId;
+		private String userId;
 		
 		//원본코드
 		@Column(name = "ORIGIN_CODE", length = 100, nullable = false)
