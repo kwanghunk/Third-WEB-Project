@@ -24,8 +24,11 @@ public class CodeController {
 */	
     // 문장 번역 API
     @GetMapping
-    public ResponseEntity<String> getTranslation(@RequestParam("origin") String originSentence) {
-        String translatedSentence = codeService.translateSentence(originSentence);
+    public ResponseEntity<String> getTranslation(
+    		@RequestParam("origin") String originSentence,
+    		@RequestParam("language") String language
+	) {
+        String translatedSentence = codeService.translateSentence(originSentence, language);
         return ResponseEntity.ok(translatedSentence);
     }
 
