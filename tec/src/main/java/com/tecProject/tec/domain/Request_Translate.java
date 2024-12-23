@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table (name = "REQUEST_TRANSLATE")
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table (name = "REQUEST_TRANSLATE")
 
 public class Request_Translate {
 	

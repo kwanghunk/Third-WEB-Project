@@ -23,10 +23,7 @@ function Main() {
                     <div className="clip-header">Clip1</div>
                         <div className="clip-body">
                             <div className="numbers">
-                                <p>1</p>
-                                <p>2</p>
-                                <p>3</p>
-                                <p>4</p>
+
                             </div>
                         </div>
                     <div className="clip-footer-line"></div>
@@ -36,10 +33,7 @@ function Main() {
                     <div className="clip-header">Clip2</div>
                         <div className="clip-body">
                             <div className="numbers">
-                                <p>1</p>
-                                <p>2</p>
-                                <p>3</p>
-                                <p className="red-text">value</p>
+
                             </div>
                         </div>
                     <div className="clip-footer-line"></div>
