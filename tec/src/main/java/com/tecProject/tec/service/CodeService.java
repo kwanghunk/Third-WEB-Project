@@ -3,6 +3,9 @@ package com.tecProject.tec.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tecProject.tec.domain.Code;
 import com.tecProject.tec.repository.CodeRepository;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,15 +19,6 @@ public class CodeService {
         this.codeRepository = codeRepository;
         this.objectMapper = objectMapper;
     }
-/*	
-    // 원본 코드를 받아서 번역된 결과를 가져오는 함수
-    public String getTranslatedCode(String originCode) {
-    	// 데이터베이스에서 origin_code를 찾고, translate_code를 가져옴
-        return codeRepository.findByOriginCode(originCode)
-                .map(Code::getTranslateCode) // 번역된 코드가 있다면 가져옴
-                .orElse("번역된 결과가 없습니다."); //데이터 베이스가 없을 시 반환 값
-    }
-*/
     
     // 문장을 번역하면서 특수문자를 유지
     public String translateSentence(String originSentence, String language) {
@@ -58,6 +52,32 @@ public class CodeService {
             // JSON 파싱 실패 시 기본값 반환
             return defaultValue;
         }
+    }
+    // 데이터베이스에서 모든 데이터 가져옴
+    public List<Code> getAllCodes() {
+        return codeRepository.findAll();
+    }
+    
+    // 특정 번역 데이터를 id로 가져옴
+    public Code getCodeById(Integer id) {
+        return codeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("번역 데이터를 찾을 수 없습니다."));
+    }
+    // 새로운 번역 데이터 추가
+    public Code createCode(Code code) {
+        return codeRepository.save(code); // 새로운 데이터를 저장
+    }
+    
+    // 번역 데이터를 수정
+    public Code updateCode(Integer id, Code updatedCode) {
+        Code existingCode = getCodeById(id); // 기존 데이터 가져옴
+        existingCode.setOriginCode(updatedCode.getOriginCode()); // 새로운 데이터 덮어씌움
+        existingCode.setTranslateCode(updatedCode.getTranslateCode());
+        return codeRepository.save(existingCode); // 수정된 데이터 저장
+    }
+
+    public void deleteCode(Integer id) { // 번역 데이터 삭제
+        codeRepository.deleteById(id); // 데이터베이스에서 데이터 삭제
     }
 }
 
