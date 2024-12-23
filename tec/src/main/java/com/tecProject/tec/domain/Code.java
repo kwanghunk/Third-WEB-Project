@@ -5,11 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table (name = "CODE")
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table (name = "CODE")
 
 public class Code {
 	

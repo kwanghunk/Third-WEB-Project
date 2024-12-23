@@ -30,30 +30,30 @@ public class UserSupport {
 	@Column(name = "INQUIRY_NO", nullable = false)
 	private int inquiryNo;
 	
-	@Column(name = "USER_ID", nullable = false, length = 12)
-	private String userId;
-	
-	@Column(name = "TYPE", nullable = false)
-	private int type;
-	
-	@Column(name = "TITLE", nullable = false, length = 100)
-	private String title;
-	
-	@Column(name = "INQUIRY", nullable = false, length = 4000)
-	private String inquiry;
-	
-	@Column(name = "CREATED_DATE", nullable = false, updatable = false)
-	@CreatedDate
-	private LocalDate createdDate;
-	
-	@Column(name = "MODIFIED_DATE", nullable = false)
-	@LastModifiedDate
-	private LocalDate modifiedDate;
-	
-	@Column(name = "IS_DELETED", nullable = false, length = 2)
-	private String isDeleted;
-	
-	@Column(name = "DELETED_DATE")
-	@LastModifiedDate
-	private LocalDate deletedDate;
+		@Column(name = "USER_ID", nullable = false, length = 12)
+		private String userId;
+		
+		@Column(name = "TYPE", nullable = false)
+		private int type;
+		
+		@Column(name = "TITLE", nullable = false, length = 100)
+		private String title;
+		
+		@Column(name = "INQUIRY", nullable = false, length = 4000)
+		private String inquiry;
+		
+		@Column(name = "CREATED_DATE", nullable = false, updatable = false)
+		@CreatedDate
+		private LocalDate createdDate;
+		
+		@Column(name = "MODIFIED_DATE", nullable = false)
+		@LastModifiedDate
+		private LocalDate modifiedDate;
+		
+		@Column(name = "IS_DELETED", nullable = false, length = 2)
+		private String isDeleted;
+		
+		@Column(name = "DELETED_DATE")
+		@LastModifiedDate
+		private LocalDate deletedDate;
 }
