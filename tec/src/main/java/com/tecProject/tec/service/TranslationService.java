@@ -31,7 +31,7 @@ public class TranslationService {
         // 각 부분을 번역 또는 그대로 둠
         for (String part : parts) {
             if (part.matches("[a-zA-Z0-9]+")) { // 영어 단어라면
-                String translatedWord = translationRepository.findByOrginCode(part)
+                String translatedWord = translationRepository.findByOriginCode(part)
                         .map(Code::getTranslateCode) // 번역 결과 가져오기
                         .map(translateCode -> getTranslationForLanguage(translateCode, language, part)) // 언어별 번역 처리
                         .orElse(part); // 번역 결과가 없으면 원본 사용
@@ -53,31 +53,5 @@ public class TranslationService {
             return defaultValue;
         }
     }
-    /*
-    // 데이터베이스에서 모든 데이터 가져옴
-    public List<Code> getAllCodes() {
-        return translationRepository.findAll();
-    }
-    
-    // 특정 번역 데이터를 id로 가져옴
-    public Code getCodeById(Integer id) {
-        return translationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("번역 데이터를 찾을 수 없습니다."));
-    }
-    // 새로운 번역 데이터 추가
-    public Code createCode(Code code) {
-        return translationRepository.save(code); // 새로운 데이터를 저장
-    }
-    
-    // 번역 데이터를 수정
-    public Code updateCode(Integer id, Code updatedCode) {
-        Code existingCode = getCodeById(id); // 기존 데이터 가져옴
-        existingCode.setOriginCode(updatedCode.getOriginCode()); // 새로운 데이터 덮어씌움
-        existingCode.setTranslateCode(updatedCode.getTranslateCode());
-        return translationRepository.save(existingCode); // 수정된 데이터 저장
-    }
 
-    public void deleteCode(Integer id) { // 번역 데이터 삭제
-    	translationRepository.deleteById(id); // 데이터베이스에서 데이터 삭제
-    }*/
 }

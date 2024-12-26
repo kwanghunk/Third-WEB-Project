@@ -1,50 +1,41 @@
 package com.tecProject.tec.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tecProject.tec.domain.Code;
-import com.tecProject.tec.repository.TranslationRepository;
+import com.tecProject.tec.repository.AdminRepository;
 
 @Service
 public class AdminService {
 
-	private final TranslationRepository translationRepository;
-	private final ObjectMapper objectMapper; // JSON 파싱용
+	private final AdminRepository adminRepository;
 	
 	//리포지토리 사용 준비
-	public AdminService(TranslationRepository translationRepository, ObjectMapper objectMapper) {
-        this.translationRepository = translationRepository;
-        this.objectMapper = objectMapper;
+	public AdminService(AdminRepository adminRepository) {
+        this.adminRepository = adminRepository;
+    }
+	
+	// 자동완성 키워드 검색
+	public List<String> getSuggestions(String query) {
+		
+		return adminRepository.findByOriginCodeStartingWith(query)
+				.stream()
+				.map(Code::getOriginCode)
+				.collect(Collectors.toList());
 	}
 	
-    // 데이터베이스에서 모든 데이터 가져옴
-    public List<Code> getAllCodes() {
-        return translationRepository.findAll();
-    }
-    
-    // 특정 번역 데이터를 id로 가져옴
-    public Code getCodeById(Integer id) {
-        return translationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("번역 데이터를 찾을 수 없습니다."));
-    }
-    // 새로운 번역 데이터 추가
-    public Code createCode(Code code) {
-        return translationRepository.save(code); // 새로운 데이터를 저장
-    }
-    
-    // 번역 데이터를 수정
-    public Code updateCode(Integer id, Code updatedCode) {
-        Code existingCode = getCodeById(id); // 기존 데이터 가져옴
-        existingCode.setOriginCode(updatedCode.getOriginCode()); // 새로운 데이터 덮어씌움
-        existingCode.setTranslateCode(updatedCode.getTranslateCode());
-        return translationRepository.save(existingCode); // 수정된 데이터 저장
-    }
-    
-    // 번역 데이터 삭제
-    public void deleteCode(Integer id) {
-    	translationRepository.deleteById(id); // 데이터베이스에서 데이터 삭제
-    }
+	// 특정 키워드의 상세 정보 조회
+	public Optional<Code> getCodeDetails(String keyword) {
+		return adminRepository.findByOriginCode(keyword);
+	}
+
+	// 번역 데이터 저장 또는 수정 기능
+	public Code saveCode(Code code) {
+		return adminRepository.save(code);
+	}
 }
+

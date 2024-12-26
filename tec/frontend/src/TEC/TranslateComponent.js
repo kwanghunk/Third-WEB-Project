@@ -5,7 +5,7 @@ import Header from './Header';
 function TranslateComponent() {
   const [keyword, setKeyword] = useState(""); // 입력창 입력값
   const [translation, setTranslation] = useState(""); // 번역결과
-  const [language, setLanguage] = useState("JAVA"); // 기본값 "JAVA"
+  const [language, setLanguage] = useState("Java"); // 기본값 "JAVA"
 
   const handleTranslate = async () => {
     try {
@@ -38,9 +38,9 @@ function TranslateComponent() {
             onChange={(e) => setLanguage(e.target.value)}
             style={{ marginBottom: "10px" }}  
           >
-            <option value="JAVA">JAVA</option>
-            <option value="PYTHON">PYTHON</option>
-            <option value="RUBY">RUBY</option>
+            <option value="Java">Java</option>
+            <option value="Python">Python</option>
+            <option value="Ruby">Ruby</option>
           </select>
           <br />
           <button onClick={handleTranslate} style={{ padding: "5px 10px"}}>
