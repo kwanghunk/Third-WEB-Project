@@ -28,6 +28,6 @@ public class Code {
 		private String originCode;
 		
 		//번역결과 JSON
-		@Column(name = "TRANSLATE_CODE", nullable = false, columnDefinition = "JSON")
+		@Column(name = "TRANSLATE_CODE", length = 255, nullable = false, columnDefinition = "JSON")
 		private String translateCode;
 }

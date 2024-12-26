@@ -26,7 +26,7 @@ function CodeManagement() {
     // AJAX 요청으로 일치하는 키워드 검색
     if (value.trim()) {
       try {
-        const response = await axios.get(`/test/code/suggestions`, {
+        const response = await axios.get(`/admin/code/suggestions`, {
           params: { query: value },
         });
         setSuggestions(response.data); // 제안 목록 업데이트
@@ -49,7 +49,7 @@ function CodeManagement() {
   // 선택된 키워드의 번역 결과 가져오기
   const fetchTranslations = async (selectedKeyword) => {
     try {
-      const response = await axios.get(`/test/code/details`, {
+      const response = await axios.get(`/admin/code/details`, {
         params: { keyword: selectedKeyword },
       });
       setTranslations(response.data.translate_code); // 번역 데이터 설정
@@ -96,7 +96,7 @@ function CodeManagement() {
         },
       };
 
-      const response = await axios.post("/test/code", payload);
+      const response = await axios.post("/admin/code", payload);
       alert("번역 데이터가 성공적으로 저장되었습니다!");
       console.log("서버 응답:", response.data);
 

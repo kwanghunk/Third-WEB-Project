@@ -6,7 +6,7 @@ import Editor from "@monaco-editor/react"; // Monaco Editor import
 function TranslateComponent() {
   const [keyword, setKeyword] = useState(""); // 입력창 입력값
   const [translation, setTranslation] = useState(""); // 번역결과
-  const [language, setLanguage] = useState("JAVA"); // 기본값 "JAVA"
+  const [language, setLanguage] = useState("Java"); // 기본값 "JAVA"
 
   const handleEditorChange = (value) => {
     setKeyword(value); // Monaco Editor의 내용을 상태로 저장
