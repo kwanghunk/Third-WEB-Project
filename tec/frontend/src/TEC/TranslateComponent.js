@@ -30,27 +30,18 @@ function TranslateComponent() {
         <div style = {{ padding: "20px" }}>
           <h1>코드 번역 테스트</h1>
           {/* Monaco Editor 적용 */}
-          <Editor 
-            height="300px"
-            border="1px black solid"
-            defaultLanguage="javascript" // 기본언어 설정
-            value={keyword} // Monaco Editor에 표시될 값
-            onChange={handleEditorChange} // 값이 변경될 때 마다 상태값 변경
-            option ={{
-              minimap: { enabled: true } // 미니맵 비활성화
-            }}
-          />
-
-          {/*
-          <textarea
-            rows="10" 
-            cols="60" 
-            placeholder="번역할 코드를 입력하세요요." 
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            style={{ marginBottom: "10px", padding: "5px" }}
-          />
-          */}
+          <div style={{ marginTop: "20px", border: "1px black solid", padding: "10px" }}>
+            <Editor 
+              height="200px"
+              border="1px black solid"
+              defaultLanguage="java" // 기본언어 설정
+              value={keyword} // Monaco Editor에 표시될 값
+              onChange={handleEditorChange} // 값이 변경될 때 마다 상태값 변경
+              option ={{
+                minimap: { enabled: true } // 미니맵 비활성화
+              }}
+            />
+          </div>
 
           <br />
           {/* 개발언어 선택 */}
@@ -77,21 +68,15 @@ function TranslateComponent() {
           </button>
           {/* 번역 결과 */}
           <div style={{ marginTop: "20px", border: "1px black solid", padding: "10px" }}>
-            {translation && (
-              <pre
-                style={{
-                  whiteSpace: "pre-wrap",
-                  wordWrap: "break-word",
-                  textAlign: "left", // 왼쪽 정렬
-                  margin: 0, // 여백 제거
-                  fontFamily: "monospace", // 코드를 표현하는 고정폭 글꼴
-                  }}
-                >
-                <strong>번역 결과:</strong>
-                {"\n"}
-                {translation}
-              </pre>
-            )}
+            <Editor 
+              height="200px"
+              defaultLanguage="java" // 기본언어 설정
+              value={translation} // Monaco Editor에 표시될 값            
+              option ={{
+                readOnly: true,
+                minimap: { enabled: true } // 미니맵 비활성화
+              }}
+            />
           </div>
         </div>
     </div>
