@@ -22,6 +22,7 @@ public class TranslationService {
 	
     // 문장을 번역하면서 특수문자를 유지
     public String translateSentence(String originSentence, String language) {
+    	
         // 특수문자와 단어를 구분하는 정규식
         String[] parts = originSentence.split("(?<=[^a-zA-Z0-9])|(?=[^a-zA-Z0-9])");
         
@@ -31,7 +32,7 @@ public class TranslationService {
         // 각 부분을 번역 또는 그대로 둠
         for (String part : parts) {
             if (part.matches("[a-zA-Z0-9]+")) { // 영어 단어라면
-                String translatedWord = translationRepository.findByOrginCode(part)
+                String translatedWord = translationRepository.findByOriginCode(part)
                         .map(Code::getTranslateCode) // 번역 결과 가져오기
                         .map(translateCode -> getTranslationForLanguage(translateCode, language, part)) // 언어별 번역 처리
                         .orElse(part); // 번역 결과가 없으면 원본 사용
@@ -48,6 +49,7 @@ public class TranslationService {
         try {
             var jsonNode = objectMapper.readTree(translateCode);
             return jsonNode.has(language) ? jsonNode.get(language).asText() : defaultValue;
+            
         } catch (Exception e) {
             // JSON 파싱 실패 시 기본값 반환
             return defaultValue;

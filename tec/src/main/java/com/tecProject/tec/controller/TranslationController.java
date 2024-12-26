@@ -36,9 +36,4 @@ public class TranslationController {
         String translatedSentence = translationService.translateSentence(originSentence, language);
         return ResponseEntity.ok(translatedSentence);
     }
-    
-
 }
-
-
-
