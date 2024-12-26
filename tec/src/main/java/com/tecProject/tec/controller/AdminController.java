@@ -45,5 +45,4 @@ public class AdminController {
     	Code savedCode = adminService.saveCode(code);
     	return ResponseEntity.ok(savedCode);
     }
-    
 }

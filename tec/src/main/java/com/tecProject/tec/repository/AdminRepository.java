@@ -16,5 +16,4 @@ public interface AdminRepository extends JpaRepository<Code, Integer>{
 
 	// 특정 키워드를 기준으로 상세 데이터 조회
 	Optional<Code> findByOriginCode(String keyword);
-
 }
