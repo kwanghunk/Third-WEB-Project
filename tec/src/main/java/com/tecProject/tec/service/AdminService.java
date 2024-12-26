@@ -38,4 +38,3 @@ public class AdminService {
 		return adminRepository.save(code);
 	}
 }
-
