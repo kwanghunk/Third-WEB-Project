@@ -40,8 +40,15 @@ public class AdminController {
     }
 
     // 번역데이터 저장 또는 수정 기능
-    @PostMapping
-    public ResponseEntity<Code> saveCode(@RequestBody Code code) {
+    @PostMapping("/addKeyword")
+    public ResponseEntity<?> saveCode(@RequestBody Code code) {
+        if (code.getOriginCode() == null || code.getOriginCode().trim().isEmpty()) {        	
+            return ResponseEntity.badRequest().body("originCode는 null이 될 수 없습니다.");
+        }
+        if (code.getTranslateCode() == null || code.getTranslateCode().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("translateCode는 null이 될 수 없습니다.");
+        }
+        
     	Code savedCode = adminService.saveCode(code);
     	return ResponseEntity.ok(savedCode);
     }

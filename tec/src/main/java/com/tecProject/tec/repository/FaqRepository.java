@@ -9,5 +9,5 @@ import com.tecProject.tec.domain.Faq;
 
 @Repository
 public interface FaqRepository extends JpaRepository<Faq, Long>{
-	List<Faq> findByDeletedOrderByFaqNo (boolean deleted);
+	
 }

@@ -15,11 +15,11 @@ function TranslateComponent() {
   const handleTranslate = async () => {
     try {
       const response = await axios.get("/api/code", {
-        params: { origin: keyword, language }, // 서버에 보낼 쿼리 파라미터
+        params: { origin: keyword.trim(), language }, // 서버에 보낼 쿼리 파라미터
       });
       setTranslation(response.data); // 서버에서 반환된 번역 결과 저장
     } catch (error) {
-      console.error("번역 오류: ", error);
+      console.error("번역 오류: ", error.response?.data || error.message);
       setTranslation("번역에 실패했습니다."); // 오류 메시지 처리
     }
   };

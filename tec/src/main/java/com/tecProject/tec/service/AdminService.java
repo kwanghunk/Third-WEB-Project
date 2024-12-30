@@ -35,6 +35,17 @@ public class AdminService {
 
 	// 번역 데이터 저장 또는 수정 기능
 	public Code saveCode(Code code) {
-		return adminRepository.save(code);
+		// 기존 데이터 확인
+		Optional<Code> existingCode = adminRepository.findByOriginCode(code.getOriginCode());
+		
+		if (existingCode.isPresent()) {
+			// 기존 데이터 수정
+			Code existing = existingCode.get();
+			existing.setTranslateCode(code.getTranslateCode());// 번역 데이터 수정
+			return adminRepository.save(existing); // 업데이트로 진행
+		} else {
+			// 새 데이터로 추가(저장)
+			return adminRepository.save(code);
+		}
 	}
 }

@@ -24,10 +24,10 @@ public class Code {
 		private String userId;
 		
 		//원본코드
-		@Column(name = "ORIGIN_CODE", length = 100, nullable = false)
+		@Column(name = "ORIGIN_CODE", length = 100, nullable = false, unique = true)
 		private String originCode;
 		
 		//번역결과 JSON
-		@Column(name = "TRANSLATE_CODE", length = 255, nullable = false, columnDefinition = "JSON")
+		@Column(name = "TRANSLATE_CODE", nullable = false, columnDefinition = "TEXT")
 		private String translateCode;
 }
