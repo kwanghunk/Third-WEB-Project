@@ -1,18 +1,20 @@
 package com.tecProject.tec.domain;
 
 import java.time.LocalTime;
-
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Table (name = "REQUEST_TRANSLATE")
 
 public class Request_Translate {

@@ -2,7 +2,7 @@
 .header-all {
     display:flex; 
     margin: 0 20px;
-    height: 70px;
+    height: 40px;
     top: 0; /* 상단에 고정 */
     position: sticky; /* 스크롤 시에도 고정되도록 설정 */
     background-color: white;
@@ -35,9 +35,9 @@
   
 /* 메뉴 각각 */
 .nav-menu-content {
-    margin: 0 100px;
-    font-weight: 800;
-    font-size: 18px;
+    margin: 0 50px;
+    font-weight: 600;
+    font-size: 16px;
 }
     /* 메뉴 호버 */
     .nav-menu-content:hover {
