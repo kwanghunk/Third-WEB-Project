@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Header from './Header';
+import './TranslateComponent.css';
 import Editor from "@monaco-editor/react"; // Monaco Editor import
 
 function TranslateComponent() {
@@ -25,30 +26,20 @@ function TranslateComponent() {
   };
   
   return (
-    <div className="all">
+    <div className="content-all-page">
+      {/* 헤더 컴포넌트트 */}
       <Header />
-        <div style = {{ padding: "20px" }}>
-          <h1>코드 번역 테스트</h1>
-          {/* Monaco Editor 적용 */}
-          <div style={{ marginTop: "20px", border: "1px black solid", padding: "10px" }}>
-            <Editor 
-              height="200px"
-              border="1px black solid"
-              defaultLanguage="java" // 기본언어 설정
-              value={keyword} // Monaco Editor에 표시될 값
-              onChange={handleEditorChange} // 값이 변경될 때 마다 상태값 변경
-              option ={{
-                minimap: { enabled: true } // 미니맵 비활성화
-              }}
-            />
-          </div>
 
-          <br />
+      {/* 콘텐츠 전체 div */}
+      <div className="content-all">
+        
+        {/* 콘텐츠 상단 버튼 */}
+        <div className="content-top-buttonDiv">
           {/* 개발언어 선택 */}
-          <select
+          <select 
+            className="select-language"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            style={{ marginBottom: "10px" }}  
           >
             <option value="Java">Java</option>
             <option value="Python">Python</option>
@@ -61,13 +52,27 @@ function TranslateComponent() {
             <option value="Ruby">Ruby</option>
             <option value="PHP">PHP</option>
           </select>
-          <br />
-          {/* 번역 버튼 */}
-          <button onClick={handleTranslate} style={{ padding: "5px 10px"}}>
-            번역하기
-          </button>
+          <button>다운로드</button>
+          <button>저장</button>
+        </div>
+
+        {/* 번역칸 div Monaco Editor 적용 */}
+        <div className="content-mid-translateDiv">
+          <div className="content-mid-translateDiv-left">
+            <Editor 
+              height="200px"
+              border="1px black solid"
+              defaultLanguage="java" // 기본언어 설정
+              value={keyword} // Monaco Editor에 표시될 값
+              onChange={handleEditorChange} // 값이 변경될 때 마다 상태값 변경
+              option ={{
+                minimap: { enabled: true } // 미니맵 비활성화
+              }}
+            />
+          </div>
+
           {/* 번역 결과 */}
-          <div style={{ marginTop: "20px", border: "1px black solid", padding: "10px" }}>
+          <div className="content-mid-translateDiv-right">
             <Editor 
               height="200px"
               defaultLanguage="java" // 기본언어 설정
@@ -79,6 +84,15 @@ function TranslateComponent() {
             />
           </div>
         </div>
+
+        {/* 번역 버튼 div */}
+        <div className="content-buttom-translateBtn">
+          {/* 번역 버튼 */}
+          <button className="translate-Btn" onClick={handleTranslate}>
+            번역하기
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
