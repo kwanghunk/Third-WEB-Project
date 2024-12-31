@@ -1,7 +1,6 @@
 package com.tecProject.tec.domain;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -52,12 +51,12 @@ public class UserSupport {
 		//생성일자
 		@Column(name = "CREATED_DATE", nullable = false, updatable = false)
 		@CreatedDate
-		private LocalDate createdDate;
+		private LocalDateTime createdDate;
 		
 		//수정 일자
 		@Column(name = "MODIFIED_DATE", nullable = false)
 		@LastModifiedDate
-		private LocalDate modifiedDate;
+		private LocalDateTime modifiedDate;
 		
 		//글 삭제여부
 		@Column(name = "IS_DELETED", nullable = false, length = 2)
@@ -66,5 +65,5 @@ public class UserSupport {
 		//글 삭제일자
 		@Column(name = "DELETED_DATE")
 		@LastModifiedDate
-		private LocalDate deletedDate;
+		private LocalDateTime deletedDate;
 }

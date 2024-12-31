@@ -10,6 +10,7 @@ import Faq from './TEC/Admin/Faq';
 import Login from './TEC/User/Login';
 import SignUp from './TEC/User/SignUp';
 
+
 function App() {
   return (
     <div className="App">

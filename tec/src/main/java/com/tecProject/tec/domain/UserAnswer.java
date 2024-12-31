@@ -1,7 +1,5 @@
 package com.tecProject.tec.domain;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

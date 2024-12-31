@@ -72,7 +72,7 @@ function Header({user, setUser}) {
             <span className="login-content" onClick={handleLogout}>로그아웃</span>
           </span>
         ) : (
-          <span className={"header-login"} onClick={() => { navigate('/Login') }}>로그인</span>
+          <span className={"header-login"} onClick={() => { navigate('/User/Login') }}>로그인</span>
         )}
       </div>
     </header>

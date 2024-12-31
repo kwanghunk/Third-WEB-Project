@@ -1,6 +1,5 @@
 package com.tecProject.tec.domain;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.Column;
@@ -45,7 +44,7 @@ public class Faq {
 		 
 		//생성일자
 		@Column(name = "CREATED_DATE", nullable = false)
-		private LocalDate createDate;
+		private LocalDateTime createDate;
 		  
 		//수정일자
 		@Column(name = "MODIFIED_DATE", nullable = true)

@@ -1,6 +1,5 @@
 package com.tecProject.tec.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +27,7 @@ public class FaqService {
     // FAQ 추가
     public Faq submitFaq(Faq faq) {
     	faq.setIsDeleted("N"); // 추가되는 FAQ는 삭제되지 않은 상태로 설정
-    	faq.setCreateDate(LocalDate.now()); 
+    	faq.setCreateDate(LocalDateTime.now()); 
     	return faqrepository.save(faq); // 받은 FAQ 데이터 저장 저장된 데이터 그대로 반환
     }
     

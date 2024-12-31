@@ -26,6 +26,7 @@ function TranslateComponent() {
   
   return (
     <div className="content-all-page">
+
       {/* 콘텐츠 전체 div */}
       <div className="content-all">
         
@@ -48,13 +49,17 @@ function TranslateComponent() {
             <option value="Ruby">Ruby</option>
             <option value="PHP">PHP</option>
           </select>
-          <button>다운로드</button>
-          <button>저장</button>
+          <button className="content-top-btn">다운로드</button>
+          <button className="content-top-btn">저장</button>
         </div>
 
         {/* 번역칸 div Monaco Editor 적용 */}
         <div className="content-mid-translateDiv">
           <div className="content-mid-translateDiv-left">
+            {/* p div */}
+            <div className="content-mid-pDiv">
+              <p>Clip1</p>
+            </div>
             <Editor 
               height="200px"
               border="1px black solid"
@@ -69,6 +74,10 @@ function TranslateComponent() {
 
           {/* 번역 결과 */}
           <div className="content-mid-translateDiv-right">
+            {/* p div */}
+            <div className="content-mid-pDiv">
+              <p>Clip2</p>
+            </div>
             <Editor 
               height="200px"
               defaultLanguage="java" // 기본언어 설정
@@ -85,7 +94,7 @@ function TranslateComponent() {
         <div className="content-buttom-translateBtn">
           {/* 번역 버튼 */}
           <button className="translate-Btn" onClick={handleTranslate}>
-            번역하기
+            COMPARE
           </button>
         </div>
       </div>

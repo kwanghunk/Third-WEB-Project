@@ -1,6 +1,5 @@
 package com.tecProject.tec.domain;
 
-import java.time.LocalTime;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,7 @@ import java.time.LocalDateTime;
 
 public class Request_Translate {
 	
-	//고유요청식별자(시퀀스)_Primary Key
+	//번역요청 고유키(시퀀스)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "REQUEST_NO", nullable = false)
@@ -31,7 +30,7 @@ public class Request_Translate {
 		
 		//번역요청시간
 		@Column(name = "REQUEST_TIME", nullable = false)
-	    private LocalTime requestTime;
+	    private LocalDateTime requestTime;
 		
 		//번역할 코드언어
 		@Column(name = "TYPE_CODE", length = 20, nullable = false)

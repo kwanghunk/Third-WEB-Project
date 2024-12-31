@@ -68,3 +68,13 @@ select * from code;
 select * from faq;
 
 TRUNCATE TABLE code;
+
+ALTER TABLE CODE
+MODIFY COLUMN TRANSLATE_CODE TEXT NOT NULL;
+
+commit;
+
+delete from code
+where code_id = '31';
+
+alter table code drop user_id;
