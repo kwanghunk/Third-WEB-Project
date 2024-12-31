@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import React from "react";
 
-import './Header.css';
+import './Styles/Header.css';
 
 function Header({user, setUser}) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,7 +14,7 @@ function Header({user, setUser}) {
     sessionStorage.clear();
     setUser(null);
     alert("로그아웃 되었습니다!");
-    navigate('/main');
+    navigate('/');
     window.location.reload();
   };
 
@@ -32,7 +32,9 @@ function Header({user, setUser}) {
       <div className="header-nav-menu">
         <div className="nav-menu-container">
           <div className="nav-menu-content" onClick={() => { navigate('/Admin/CodeManagement') }} style={{ cursor: "pointer" }}>코드 API</div>
-          <div className="nav-menu-content" onClick={() => { navigate('/support/faq') }} style={{ cursor: "pointer" }}>SUPPORT</div>
+          <div className="nav-menu-content" onClick={() => { navigate('/Admin/Faq') }} style={{ cursor: "pointer" }}>자주 묻는 질문</div>
+          <div className="nav-menu-content" onClick={() => { navigate('/User/Login') }} style={{ cursor: "pointer" }}>로그인</div>
+
           
           <FaSearch
             className="search-icon"
@@ -70,7 +72,7 @@ function Header({user, setUser}) {
             <span className="login-content" onClick={handleLogout}>로그아웃</span>
           </span>
         ) : (
-          <span className={"header-login"} onClick={() => { navigate('/login') }}>로그인</span>
+          <span className={"header-login"} onClick={() => { navigate('/Login') }}>로그인</span>
         )}
       </div>
     </header>

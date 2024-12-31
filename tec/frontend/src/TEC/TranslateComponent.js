@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Header from './Header';
-import './TranslateComponent.css';
+import './Styles/TranslateComponent.css';
 import Editor from "@monaco-editor/react"; // Monaco Editor import
 
 function TranslateComponent() {
@@ -27,9 +26,6 @@ function TranslateComponent() {
   
   return (
     <div className="content-all-page">
-      {/* 헤더 컴포넌트트 */}
-      <Header />
-
       {/* 콘텐츠 전체 div */}
       <div className="content-all">
         
