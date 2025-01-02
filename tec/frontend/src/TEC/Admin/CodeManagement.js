@@ -29,23 +29,22 @@ function CodeManagement() {
   const handleSearchChange = async (e) => {
     const value = e.target.value;
     setSearchQuery(value);
-
     if(value.trim()) {
-        try {
-            const response = await axios.get("/admin/code/suggestions", {
-                params: { query: value }
-            });
-            if (response.data.length > 0) {
-                setSuggestions(response.data); // 검색된 결과를 제안 목록으로 설정
-            } else {
-                setSuggestions([]); // 검색 결과가 없으면 목록 비우기
-            }
-        } catch (e) {
-            console.error("자동완성 데이터 불러오기 실패: ", e);
-            setSuggestions([]); // 오류 시 빈 목록
+      try {
+        const response = await axios.get("/admin/code/suggestions", {
+          params: { query: value }
+        });
+        if (response.data.length > 0) {
+          setSuggestions(response.data); // 검색된 결과를 제안 목록으로 설정
+        } else {
+          setSuggestions([]); // 검색 결과가 없으면 목록 비우기
         }
+      } catch (e) {
+        console.error("자동완성 데이터 불러오기 실패: ", e);
+        setSuggestions([]); // 오류 시 빈 목록
+      }
     } else {
-        setSuggestions([]); // 검색창이 비었을 때 초기화
+      setSuggestions([]); // 검색창이 비었을 때 초기화
     }
   };
 
@@ -57,88 +56,84 @@ function CodeManagement() {
   // 확인 버튼 클릭 처리
   const handleConfirm = async () => {
     if(!searchQuery.trim()) {
-        alert("키워드를 입력하세요");
-        return;
+      alert("키워드를 입력하세요");
+      return;
     }
-    setKeyword(searchQuery); // 수정 키워드 업데이트
-    setIsModalOpen(false); // 모달 닫기
-
+      setKeyword(searchQuery); // 수정 키워드 업데이트
+      setIsModalOpen(false); // 모달 닫기
     try {
-        // DB 번역 데이터 가져오기
-        const response = await axios.get("/admin/code/details", {
-            params: { keyword: searchQuery }
-        });
-
-        if ( response.data && response.data.translateCode) {
-            const translationsData = JSON.parse(response.data.translateCode); // 번역값 JSON 파싱
-            setTranslations(translationsData); // 파싱한 데이터 상태 업데이트       
-        } else {
-            setTranslations({
-                Java: "",
-                Python: "",
-                JavaScript: "",
-                CSharp: "",
-                CPlusPlus: "",
-                C: "",
-                TypeScript: "",
-                Kotlin: "",
-                Ruby: "",
-                PHP: "",
-              });   
-        }
-    } catch (e) {
-        console.error("번역 데이터 로드 실패: ", e);
-        alert("데이터 로드 중 오류가 발생했습니다: ");
+      // DB 번역 데이터 가져오기
+      const response = await axios.get("/admin/code/details", {
+        params: { keyword: searchQuery }
+      });
+      if ( response.data && response.data.translateCode) {
+        const translationsData = JSON.parse(response.data.translateCode); // 번역값 JSON 파싱
+        setTranslations(translationsData); // 파싱한 데이터 상태 업데이트     
+      } else {
         setTranslations({
-            Java: "",
-            Python: "",
-            JavaScript: "",
-            CSharp: "",
-            CPlusPlus: "",
-            C: "",
-            TypeScript: "",
-            Kotlin: "",
-            Ruby: "",
-            PHP: "",
-        });
-    }
+          Java: "",
+          Python: "",
+          JavaScript: "",
+          CSharp: "",
+          CPlusPlus: "",
+          C: "",
+          TypeScript: "",
+          Kotlin: "",
+          Ruby: "",
+          PHP: "",
+        });  
+      }
+    } catch (e) {
+      console.error("번역 데이터 로드 실패: ", e);
+      alert("데이터 로드 중 오류가 발생했습니다: ");
+      setTranslations({
+        Java: "",
+        Python: "",
+        JavaScript: "",
+        CSharp: "",
+        CPlusPlus: "",
+        C: "",
+        TypeScript: "",
+        Kotlin: "",
+        Ruby: "",
+        PHP: "",
+      });
+    } 
   }
   
   // 저장
   const handleSave = async () => {
     if (!keyword.trim()) {
-        alert("수정 키워드를 입력하세요.");
-        return;
+      alert("수정 키워드를 입력하세요.");
+      return;
     }
-
+    
     if(!window.confirm("정말 저장하시겠습니까?")) return;
 
     try {
-        const payload = {
-            originCode: keyword,
-            translateCode: JSON.stringify(translations)
-        };
-        console.log("payload: ", payload);
-
-        await axios.post("/admin/code/addKeyword", payload);
-        alert("저장되었습니다.");
-
-        setKeyword(""); // 저장 후 수정 키워드 상태 초기화
-        setTranslations({ // 저장 후 번역결과 값 초기화화
-            Java: "",
-            Python: "",
-            JavaScript: "",
-            CSharp: "",
-            CPlusPlus: "",
-            C: "",
-            TypeScript: "",
-            Kotlin: "",
-            Ruby: "",
-            PHP: "",
-        });
+      const payload = {
+        originCode: keyword,
+        translateCode: JSON.stringify(translations)
+      };
+      console.log("payload: ", payload);
+      await axios.post("/admin/code/addKeyword", payload);
+      alert("저장되었습니다.");
+      setKeyword(""); // 저장 후 수정 키워드 상태 초기화
+      setTranslations({ // 저장 후 번역결과 값 초기화화
+        Java: "",
+        Python: "",
+        JavaScript: "",
+        CSharp: "",
+        CPlusPlus: "",
+        C: "",
+        TypeScript: "",
+        Kotlin: "",
+        Ruby: "",
+        PHP: "",
+      });
     } catch (e) {
-        console.error("키워드 저장 실패: ", e);
-        alert("저장 중 오류가 발생했습니다.");
+      console.error("키워드 저장 실패: ", e);
+      alert("저장 중 오류가 발생했습니다.");
     }
   };
 
@@ -146,7 +141,6 @@ function CodeManagement() {
     <div className="code-management">
       <h3>키워드 관리</h3>
 
-      {/* 수정 키워드 입력 */}
       <div className="keyword-section">
         <label>수정 키워드:</label>
         <input value={keyword} readOnly />
@@ -215,5 +209,4 @@ function CodeManagement() {
     </div>
   );
 }
-
 export default CodeManagement;

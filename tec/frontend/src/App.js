@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 
@@ -12,15 +12,18 @@ import SignUp from './TEC/User/SignUp';
 
 
 function App() {
+  // 로그인 상태 관리
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
   return (
     <div className="App">
-      <Header /> {/* 모든 페이지 상단에 고정될 헤더 */}
+      <Header />
       <div className="pages">
         <Routes>
-          <Route path='/' element={<TranslateComponent />} /> {/* Main 컴포넌트를 렌더링 */}
+          <Route path='/' element={<TranslateComponent />} />
           <Route path="/Admin/CodeManagement" element={<CodeManagement />} />
           <Route path="/Admin/Faq" element={<Faq />} />
-          <Route path="/User/Login" element={<Login />} />
+          <Route path="/User/Login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/User/SignUp" element={<SignUp />} />
         </Routes>
       </div>

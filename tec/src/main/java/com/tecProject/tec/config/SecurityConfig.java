@@ -37,9 +37,13 @@ public class SecurityConfig {
             
             //요청에 대한 허가 규칙 설정
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/code", "/admin/code/**", "/UserLogin", "/SignUp", "/Admin/faqs").permitAll() // 접근 할 수 있는 URL
+                .requestMatchers("/api/code", "/admin/code/**", "/user/login", "/user/signup", "/Admin/faqs", "user/check-id", "user/check-email").permitAll() // 접근 할 수 있는 URL
+                .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자 전용 API
                 .anyRequest().authenticated() // 위에서 허용하지 않은 나머지 요청은 로그인해야 접근 가능
             )
+            
+            // 기본 로그인 폼 비활성화 및 REST API 방식 지원
+            .formLogin(form -> form.disable())
             
             //로그인 설정
             .formLogin(form -> form
