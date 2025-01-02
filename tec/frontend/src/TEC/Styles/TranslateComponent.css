@@ -1,90 +1,107 @@
-.content-all-page {
-    margin-top:10px;
-    border: 1px black solid;
-    padding: 10px;
+/* 콘텐츠 전체 */
+.content-all {
+  margin-top: 10px;
+  padding: 30px;
+  font-family: 'Freesentation';
 }
 
-.content-all { /* 콘텐츠 전체 div */
-    margin-top: 10px;
-    border: 1px black solid;
-    padding: 10px;
+/* 콘텐츠 상단 버튼 전체 */
+.content-top-buttonDiv {
+  display: flex;
+  padding: 10px;
+  justify-content: right;
+  margin: 0 20px;
 }
 
-.content-top-buttonDiv { /* 콘텐츠 상단 버튼 */
-    margin-top: 10px;
-    border: 1px black solid;
-    padding: 10px;
-    display: flex;
-    justify-content: right;
+/* 개발언어 JAVA등 전체, 다운로드,저장 버튼 각각 */
+.select-language, 
+.content-top-btn {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-family: 'Freesentation';
+  color: white;
+  background-color:#6841ea;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 6px 16px;
 }
 
-.select-language, .content-top-btn { /* 개발언어 select, 다운로드&저장 btn */
-    margin-left: 10px;
-    margin-right: 10px;
+/* 버튼 호버 시 색상 변경 */
+.select-language:hover, 
+.content-top-btn:hover {
+  background-color: rgb(255, 196, 0);
 }
 
-.content-mid-translateDiv { /* 번역칸 div */
-    margin-top: 10px;
-    border: 1px black solid;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px; /* 간격 */
-    flex-wrap: wrap; /* 창 폭이 줄어들면 줄 바꿈꿈 */
+
+
+/* 번역칸 전체 */
+.content-mid-translateDiv {
+  display: flex;
+  gap: 50px;
+  flex-wrap: wrap; /* 창 폭이 줄어들면 줄 바꿈 */
+  justify-content: center;
 }
 
-.content-mid-pDiv {
-    border-bottom: 1px lightgray solid;
-    margin-bottom: 5px;
-}
-.content-mid-translateDiv p {
-    display: flex;
-    justify-content: left;
-    font-size: 1.1em;
-    border: 1px black solid;
+/* 오리지널텍스트, 체인지텍스트 글자 */
+.content-title {
+  display: flex;
+  margin-bottom: 5px;
+  justify-content: left;
+  font-size: 19px;
+  font-weight: 800;
 }
 
-.content-mid-translateDiv-left,   /* 번역 결과 div */
-.content-mid-translateDiv-right { /* 번역 요청 div */
-    border: 1px lightgray solid;
-    border-radius: 5%;
-    padding: 10px;
-    width: 47%; /* 기본 가로 비율율 */
-    box-sizing: border-box; /* padding 포함 크기기 */
+/* 번역 결과, 번역 요청 큰 칸 */
+.content-mid-translateDiv-left,
+.content-mid-translateDiv-right {
+  border: 1px solid lightgray;
+  padding: 10px;
+  width: 850px;
+  background: white;
+  border-radius: 10px;
+  height: 300px;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
 }
 
-@media screen and (max-width: 768px) { /* 창 폭 768px 이하이면 적용용 */
-    .content-mid-translateDiv {
-        flex-direction: column; /* 세로 정렬렬 */
-    }
-
-    .content-mid-translateDiv-left,
-    .content-mid-translateDiv-right {
-        width: 98%;
-    }
+/* 클릭 상태 */
+.content-mid-translateDiv-left.active,
+.content-mid-translateDiv-right.active {
+  border-color: #6841ea;
 }
 
-.content-buttom-translateBtn { /* 번역 버튼 div */
-    margin-top: 10px;
-    border: 1px black solid;
-    padding: 10px;
+/* 창 폭 768px 이하이면 적용용 */
+@media screen and (max-width: 768px) {
+.content-mid-translateDiv {
+    flex-direction: column;
 }
 
-.translate-Btn { /* 번역 버튼 */
-    padding: 5px 10px;
-    color: white;
-    background-color: darkgray;
-    border: 1px darkgray solid;
-    border-radius: 5%;
-    transition: all 0.3s; /* 트랜지션은 버튼에 적용 */
+.content-mid-translateDiv-left,
+.content-mid-translateDiv-right {
+    width: 98%;
+}
+}
+
+/* 번역 버튼 */
+.content-buttom-translateBtn {
+  margin-top: 10px;
+  padding: 10px;
+}
+
+/* 번역 버튼 */
+.translate-Btn {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-family: 'Freesentation';
+  color: white;
+  background-color:#6841ea;;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 6px 16px;
 }
 
 .translate-Btn:hover {
-    background-color: rgb(154, 154, 154);
-    transform: sacle(0.98);
-}
-
-.translate-Btn:active {
-    background-color: rgb(113, 113, 113);
-    transform: translateY(0.5px) scale(0.98);
+  background-color: rgb(255, 196, 0);
 }

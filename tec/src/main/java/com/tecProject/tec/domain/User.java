@@ -65,4 +65,12 @@ public class User {
 		@Column(name = "CHANGE_PW_DATE")
 		@LastModifiedDate
 		private LocalDateTime changePwDate;
+		
+		//주민등록번호 앞자리
+	    @Column(name = "SSN_FIRST", nullable = false, length = 6)
+	    private String ssnFirst;
+
+	    //주민등록번호 뒷자리
+	    @Column(name = "SSN_SECOND", nullable = false, length = 7)
+	    private String ssnSecond;
 }

@@ -1,3 +1,9 @@
+body {
+  font-family: 'Freesentation', sans-serif; /* 기본 폰트 설정 */
+  font-weight: 500;
+  margin: 0;
+}
+
 @font-face {
   font-family: 'Freesentation';
   src: url('/public/fonts/Freesentation-1Thin.ttf') format('truetype'); /* Thin */
