@@ -45,8 +45,16 @@ public class UserSupport {
 		private String title;
 		
 		//문의 내용
-		@Column(name = "INQUIRY", nullable = false, length = 4000)
-		private String inquiry;
+		@Column(name = "CONTENT", columnDefinition = "TEXT")
+		private String content;
+		
+		//관리자 답변
+		@Column(name = "reply", columnDefinition = "TEXT")
+		private String reply;
+		
+		//문의 상태: 대기, 처리 중, 답변 완료
+		@Column(name = "STATUS", nullable = false)
+		private String status;
 		
 		//생성일자
 		@Column(name = "CREATED_DATE", nullable = false, updatable = false)

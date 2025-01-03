@@ -22,7 +22,7 @@ public class Code {
     private Integer codeId;
 		
 		//원본코드
-		@Column(name = "ORIGIN_CODE", length = 100, nullable = true)
+		@Column(name = "ORIGIN_CODE", length = 100, nullable = true, unique = true)
 		private String originCode;
 		
 		//번역결과 JSON

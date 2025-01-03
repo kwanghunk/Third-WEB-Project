@@ -33,6 +33,7 @@ function Header({user, setUser}) {
         <div className="nav-menu-container">
           <div className="nav-menu-content" onClick={() => { navigate('/Admin/CodeManagement') }} style={{ cursor: "pointer" }}>코드 API</div>
           <div className="nav-menu-content" onClick={() => { navigate('/Admin/Faq') }} style={{ cursor: "pointer" }}>자주 묻는 질문</div>
+          <div className="nav-menu-content" onClick={() => { navigate('/UserSupportList') }} style={{ cursor: "pointer" }}>1:1 문의</div>
           <div className="nav-menu-content" onClick={() => { navigate('/User/Login') }} style={{ cursor: "pointer" }}>로그인</div>
 
           
