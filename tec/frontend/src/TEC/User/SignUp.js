@@ -5,13 +5,12 @@ import { useNavigate } from "react-router-dom";
 const Signup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    userId: "",
-    userName: "",
+    username: "",
+    name: "",
     phone: "",
     email: "",
-    userPwd: "",
+    password: "",
     confirmPassword: "",
-    userType: "",
     ssnFirst: "",
     ssnSecond: "",
   });
@@ -37,7 +36,7 @@ const Signup = () => {
         : value,
     }));
 
-    if (name === "userId") {
+    if (name === "username") {
       setIdCheckMessage("");
     }
 
@@ -45,11 +44,11 @@ const Signup = () => {
       setEmailCheckMessage("");
     }
 
-    if (name === "confirmPassword" || name === "userPwd") {
+    if (name === "confirmPassword" || name === "password") {
       // 비밀번호 확인 메시지 업데이트
-      if (formData.userPwd !== value && name === "confirmPassword") {
+      if (formData.password !== value && name === "confirmPassword") {
         setPasswordMatchMessage("비밀번호가 일치하지 않습니다.");
-      } else if (name === "userPwd" && value !== formData.confirmPassword) {
+      } else if (name === "password" && value !== formData.confirmPassword) {
         setPasswordMatchMessage("비밀번호가 일치하지 않습니다.");
       } else {
         setPasswordMatchMessage("비밀번호가 일치합니다.");
@@ -58,18 +57,18 @@ const Signup = () => {
   };
 
   const handleIdCheck = async () => {
-    if (!formData.userId.trim()) {
+    if (!formData.username.trim()) {
       setIdCheckMessage("아이디를 입력해 주세요.");
       return;
     }
 
     try {
       setIsLoading(true);
-      const { data } = await axios.post("http://localhost:8080/user/check-id", {
-        userId: formData.userId,
+      const { data } = await axios.post("/user/check-id", {
+        username: formData.username,
       });
 
-      if (data.isAvailable) {
+      if (data === "사용 가능한 아이디입니다.") {
         setIdCheckMessage("사용 가능한 아이디입니다.");
       } else {
         setIdCheckMessage("이미 사용 중인 아이디입니다.");
@@ -89,11 +88,11 @@ const Signup = () => {
 
     try {
       setIsLoading(true);
-      const { data } = await axios.post("http://localhost:8080/user/check-email", {
+      const { data } = await axios.post("/user/check-email", {
         email: formData.email,
       });
 
-      if (data.isAvailable) {
+      if (data === "사용 가능한 이메일입니다.") {
         setEmailCheckMessage("사용 가능한 이메일입니다.");
       } else {
         setEmailCheckMessage("이미 사용 중인 이메일입니다.");
@@ -131,10 +130,14 @@ const Signup = () => {
 
     try {
       setIsLoading(true);
-      await axios.post("http://localhost:8080/user/signup", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+      await axios.post("/user/signup", {
+        username: formData.username,
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        password: formData.password,
+        ssnFirst: formData.ssnFirst,
+        ssnSecond: formData.ssnSecond,
       });
 
       setMessage("회원가입이 성공적으로 완료되었습니다.");
@@ -151,33 +154,35 @@ const Signup = () => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>회원가입</h2>
+      
       <div>
         <label>이름:</label>
         <input
           type="text"
-          name="userName"
-          value={formData.userName}
+          name="name"
+          value={formData.name}
           onChange={handleChange}
           required
         />
-        </div>
+      </div>
       {message && <p style={{ color: message.includes("성공") ? "green" : "red" }}>{message}</p>}
+      
       <div>
-        {idCheckMessage && <p style={{ color: idCheckMessage.includes("가능") ? "green" : "red" }}>{idCheckMessage}</p>}
         <label>아이디:</label>
         <input
           type="text"
-          name="userId"
-          value={formData.userId}
+          name="username"
+          value={formData.username}
           onChange={handleChange}
           required
         />
         <button type="button" onClick={handleIdCheck} disabled={isLoading}>
           {isLoading ? "확인 중..." : "중복 확인"}
         </button>
+        {idCheckMessage && <p style={{ color: idCheckMessage.includes("가능") ? "green" : "red" }}>{idCheckMessage}</p>}
       </div>
+
       <div>
-        {emailCheckMessage && <p style={{ color: emailCheckMessage.includes("가능") ? "green" : "red" }}>{emailCheckMessage}</p>}
         <label>이메일:</label>
         <input
           type="email"
@@ -189,17 +194,20 @@ const Signup = () => {
         <button type="button" onClick={handleEmailCheck} disabled={isLoading}>
           {isLoading ? "확인 중..." : "중복 확인"}
         </button>
+        {emailCheckMessage && <p style={{ color: emailCheckMessage.includes("가능") ? "green" : "red" }}>{emailCheckMessage}</p>}
       </div>
+
       <div>
         <label>비밀번호:</label>
         <input
           type="password"
-          name="userPwd"
-          value={formData.userPwd}
+          name="password"
+          value={formData.password}
           onChange={handleChange}
           required
         />
       </div>
+
       <div>
         <label>비밀번호 확인:</label>
         <input
@@ -215,6 +223,7 @@ const Signup = () => {
           </p>
         )}
       </div>
+      
       <div>
         <label>주민등록번호:</label>
         <input
@@ -250,19 +259,6 @@ const Signup = () => {
         />
       </div>
 
-      <div>
-        <label>사용자 유형:</label>
-        <select
-          name="userType"
-          value={formData.userType}
-          onChange={handleChange}
-          required
-        >
-          <option value="">선택하세요</option>
-          <option value="1">관리자</option>
-          <option value="2">일반 사용자</option>
-        </select>
-      </div>
       <button type="submit" disabled={isLoading}>
         {isLoading ? "처리 중..." : "회원가입"}
       </button>

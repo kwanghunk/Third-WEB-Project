@@ -5,12 +5,10 @@ import com.tecProject.tec.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    // 사용자 아이디로 검색
-    User findByUserId(String userId);
+	Boolean existsByUsername(String username);
 
-    // 아이디 중복 여부 확인
-    boolean existsByUserId(String userId);
-    
-    //이메일 중복 여부 확인 
-    boolean existsByEmail(String email);
+	User findByUsername(String username);
+
+
+	boolean existsByEmail(String email);
 }

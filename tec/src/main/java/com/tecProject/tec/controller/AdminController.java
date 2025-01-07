@@ -52,4 +52,9 @@ public class AdminController {
     	Code savedCode = adminService.saveCode(code);
     	return ResponseEntity.ok(savedCode);
     }
+    
+    @GetMapping("/contact")
+    public String adminP() {
+    	return "Admin Controller";
+    }
 }

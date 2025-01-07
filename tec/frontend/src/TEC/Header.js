@@ -1,21 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import React from "react";
 
 import './Styles/Header.css';
 
-function Header({user, setUser}) {
+function Header({ user, setUser }) {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false); // 검색 모달 추가
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("username");
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, [setUser]);
+
   const handleLogout = () => {
-    sessionStorage.clear();
-    setUser(null);
+    localStorage.clear(); // 토큰과 사용자 정보 제거
+    setUser(null); // 상태 초기화
     alert("로그아웃 되었습니다!");
     navigate('/');
-    window.location.reload();
   };
 
   return (
@@ -34,7 +40,6 @@ function Header({user, setUser}) {
           <div className="nav-menu-content" onClick={() => { navigate('/Admin/CodeManagement') }} style={{ cursor: "pointer" }}>코드 API</div>
           <div className="nav-menu-content" onClick={() => { navigate('/Admin/Faq') }} style={{ cursor: "pointer" }}>자주 묻는 질문</div>
           <div className="nav-menu-content" onClick={() => { navigate('/UserSupportList') }} style={{ cursor: "pointer" }}>1:1 문의</div>
-          <div className="nav-menu-content" onClick={() => { navigate('/User/Login') }} style={{ cursor: "pointer" }}>로그인</div>
 
           
           <FaSearch
@@ -78,6 +83,6 @@ function Header({user, setUser}) {
       </div>
     </header>
   );
-}
+};
 
 export default Header;

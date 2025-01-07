@@ -1,71 +1,54 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Login = ({ setIsLoggedIn }) => {
-  const [credentials, setCredentials] = useState({
-    userId: "",
-    userPwd: "",
-  });
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+const Login = ({ setUser }) => {
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    // sessionStorage에서 userId를 가져옴
-    const sessionUserId = sessionStorage.getItem("userId");
-  
-    if (sessionUserId) {
-      // sessionStorage에 userId가 있는 경우 상태를 설정
-      setCredentials((prevState) => ({ ...prevState, userId: sessionUserId }));
-    } else {
-      // sessionStorage에 userId가 없는 경우 localStorage에서 userId를 삭제
-      localStorage.removeItem("userId");
-    }
-  }, []);
-  
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+  const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleChange = (e) => {
-    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
-    setError("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage("");
+
+    if (!formData.username.trim() || !formData.password.trim()) {
+      setMessage("아이디와 비밀번호를 입력해 주세요.");
+      return;
+    }
+
     try {
-      const response = await axios.post(
-        "http://localhost:8080/user/login",
-        credentials,
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-  
-      console.log("Response data:", response.data);
-  
-      if (response.data && response.data.success) {
-        setIsLoggedIn(true);
-        console.log("로그인 성공:", response.data);
-  
-        // sessionStorage와 localStorage에 사용자 ID 저장
-        sessionStorage.setItem("userId", credentials.userId);
-        localStorage.setItem("userId", credentials.userId);
-  
-        navigate("/");
-      } else {
-        const errorMessage = response.data.message || "로그인 실패";
-        console.warn("로그인 실패:", errorMessage);
-        setError(errorMessage);
-      }
+      setIsLoading(true);
+      const response = await axios.post("/user/login", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("응답 데이터:", response.data);
+      // 토큰 저장
+      const { token, username, role } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("username", username);
+      localStorage.setItem("role", role);
+
+      // 임시 토큰 확인
+      alert(`토큰 생성됨: ${token}`);
+      setUser(username); // 사용자 정보 업데이트
+      setMessage("로그인에 성공했습니다!");
+      setTimeout(() => navigate("/"), 2000); // 메인 페이지로 이동
     } catch (error) {
-      if (error.response) {
-        console.error("서버 오류:", error.response.data);
-        setError(error.response.data.message || "서버 오류 발생");
-      } else {
-        console.error("네트워크 오류:", error.message);
-        setError("네트워크 연결 실패");
-      }
+      setMessage(error.response?.data || "로그인 중 오류가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -90,19 +73,12 @@ const Login = ({ setIsLoggedIn }) => {
       >
         <h2 style={{ textAlign: "center", marginBottom: "20px" }}>로그인</h2>
 
-        {error && (
-          <div style={{ color: "red", marginBottom: "10px", textAlign: "center" }}>
-            {error}
-          </div>
-        )}
-
         <div style={{ marginBottom: "10px" }}>
-          <label htmlFor="userId" style={{ display: "block", marginBottom: "5px" }}>아이디</label>
+          <label htmlFor="username" style={{ display: "block", marginBottom: "5px" }}>아이디</label>
           <input
             type="text"
-            name="userId"
-            id="userId"
-            value={credentials.userId}
+            name="username"
+            value={formData.username}
             onChange={handleChange}
             required
             style={{
@@ -115,12 +91,11 @@ const Login = ({ setIsLoggedIn }) => {
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-          <label htmlFor="userPwd" style={{ display: "block", marginBottom: "5px" }}>비밀번호</label>
+          <label htmlFor="password" style={{ display: "block", marginBottom: "5px" }}>비밀번호</label>
           <input
             type="password"
-            name="userPwd"
-            id="userPwd"
-            value={credentials.userPwd}
+            name="password"
+            value={formData.password}
             onChange={handleChange}
             required
             style={{
@@ -131,6 +106,8 @@ const Login = ({ setIsLoggedIn }) => {
             }}
           />
         </div>
+
+        {message && <p style={{ color: message.includes("성공") ? "green" : "red" }}>{message}</p>}
 
         <button
           type="submit"

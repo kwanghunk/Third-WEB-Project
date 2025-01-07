@@ -27,6 +27,22 @@
   margin-bottom: 20px;
 }
 
+.userSupport-searchBar button {
+  padding: 8px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.userSupport-searchBar button:hover {
+  background-color: #0056b3;
+  color: white;
+  border-color: #0056b3;
+}
+
 /* userSupport 목록 전체 */
 .userSupport-list {
   display: flex;
@@ -42,6 +58,9 @@
   background-color: #f9f9f9;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: left;
+}
+.userSupport-item:hover {
+  background-color: #d0d0d0;
 }
 
 /* 질문 */
@@ -61,30 +80,6 @@
   font-size: 0.9rem;
   color: #777;
 }
-
-/* 페이지네이션 */
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-/* 페이지네이션 버튼 */
-.pagination-button {
-  margin: 0 5px;
-  padding: 5px 10px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-  .pagination-button.active {
-    background-color: #6841ea;
-    color: white;
-    border-color: #6841ea;
-  }
 
 /* userSupport 등록 폼 전체 */
 .userSupport-form {

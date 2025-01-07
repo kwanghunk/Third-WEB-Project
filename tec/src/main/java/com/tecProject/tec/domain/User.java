@@ -32,21 +32,21 @@ public class User {
 	@Column(name = "USER_NO")
 	private int userNo;
 		
-		//회원타입 (1=관리자, 2=회원)
+		//회원타입 (ROLE_ADMIN=관리자, ROLE_USER=회원)
 		@Column(name = "USER_TYPE", nullable = false)
-		private int userType;
+		private String userType;
 		
 		//사용자 아이디
-		@Column(name = "USER_ID", nullable = false, unique = true, length = 50)
-		private String userId;
+		@Column(name = "USER_NAME", nullable = false, unique = true, length = 50)
+		private String username;
 		
 		//비밀번호(암호화)
-		@Column(name = "USER_PWD", nullable = false, length = 255)
-		private String userPwd;
+		@Column(name = "PASSWORD", nullable = false, length = 255)
+		private String password;
 		
 		//이름(5자 까지)
-		@Column(name = "USER_NAME", nullable = false, length = 50)
-		private String userName;
+		@Column(name = "NAME", nullable = false, length = 50)
+		private String name;
 		
 		//이메일(아이디로 겸용가능)
 		@Column(name = "EMAIL", nullable = false, unique = true, length = 100)

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import '../Styles/UserSupportDetail.css';
 
 function UserSupportDetail() {
     const [inquiry, setInquiry] = useState(null);
@@ -51,7 +52,7 @@ function UserSupportDetail() {
 
     return (
         <div className="userSupport-detail-all">
-            <h2 className="userSupport-detail-title">문의 내용</h2>
+            <h2 className="userSupport-detail-hTitle">문의 내용</h2>
             <div className="userSupport-detail-container">
                 <div className="userSupport-detail-title">
                     <strong>{inquiry.title}</strong>
@@ -73,8 +74,8 @@ function UserSupportDetail() {
                 </div>
             </div>
             <div className="userSupport-detail-btn">
-                <button onClick={() => navigate(`/UserSupportEdit?inquiryNo=${inquiry.inquiryNo}`, { state: { inquiry, userId, inquiries } })}>수정</button>
-                <button onClick={handleDelete}>삭제</button>
+                <button onClick={() => navigate(`/UserSupportEdit?inquiryNo=${inquiry.inquiryNo}`, { state: { inquiry, userId, inquiries } })}>수정</button>&ensp;
+                <button onClick={handleDelete}>삭제</button>&ensp;
                 <button onClick={handleBack}>목록</button>
             </div>
         </div>

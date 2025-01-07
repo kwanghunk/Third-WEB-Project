@@ -37,8 +37,8 @@ function UserSupportList() {
                         placeholder="아이디를 입력하세요."
                         value={userId}
                         onChange={e => setUserId(e.target.value)}
-                    />
-                    <button onClick={fetchInquiries}>조회</button>
+                    />&emsp;
+                    <button onClick={fetchInquiries}>조회</button>&emsp;
                     <button onClick={() => {navigate('/UserSupportForm')}}>문의</button>
                 </div>
                 <div className="userSupport-list">

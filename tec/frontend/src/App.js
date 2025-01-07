@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 
@@ -16,13 +16,21 @@ import SignUp from './TEC/User/SignUp';
 
 
 
-function App() {
+const App = () => {
   // 로그인 상태 관리
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // localStorage에서 사용자 정보 로드
+    const storedUser = localStorage.getItem("username");
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+
   return (
     <div className="App">
-      <Header />
+      <Header user={user} setUser={setUser} />
       <div className="pages">
         <Routes>
           <Route path='/' element={<TranslateComponent />} />
@@ -32,7 +40,7 @@ function App() {
           <Route path="/UserSupportForm" element={<UserSupportForm />} />
           <Route path="/UserSupportDetail" element={<UserSupportDetail />} />
           <Route path="/UserSupportEdit" element={<UserSupportEdit />} />
-          <Route path="/User/Login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/User/Login" element={<Login setUser={setUser} />} />
           <Route path="/User/SignUp" element={<SignUp />} />
         </Routes>
       </div>
