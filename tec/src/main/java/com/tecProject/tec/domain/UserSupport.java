@@ -33,8 +33,8 @@ public class UserSupport {
 	private int inquiryNo;
 	
 		//회원 ID
-		@Column(name = "USER_ID", nullable = false, length = 12)
-		private String userId;
+		@Column(name = "USER_NAME", nullable = false, length = 12)
+		private String username;
 		
 		//카테고리 타입
 		@Column(name = "TYPE", nullable = false)

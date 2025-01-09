@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import '../Styles/UserSupportList.css';
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -7,18 +7,64 @@ import { useLocation, useNavigate } from "react-router-dom";
 function UserSupportList() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [userId, setUserId] = useState(location.state?.userId || ""); // 조회 아이디 상태
-    const [inquiries, setInquiries] = useState(location.state?.inquiries || []); // 문의내역 상태
+    const [initialInquiries, setInitialInquiries] = useState([]); // 초기 목록
+    const [inquiries, setInquiries] = useState([]); // 문의내역 상태
+    const [keyword, setKeyword] = useState(""); // 키워드 상태 추가
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    
 
-    const fetchInquiries = async () => {
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            setIsLoggedIn(false);
+            setErrorMessage("로그인 후 이용 가능합니다.");
+            return;
+        }
+        setIsLoggedIn(true);
+
+        // 문의 리스트 조회 API 호출
+        const fetchInquiries = async () => {
+            try {
+                const response = await axios.get("/api/user-support", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                const data = Array.isArray(response.data) ? response.data : [];
+                setInitialInquiries(data); // 초기 데이터 저장
+                setInquiries(data); // 현재 데이터에도 초기값 설정
+            } catch (e) {
+                console.error("문의내역 조회 실패: ", e);
+                setErrorMessage("문의내역 조회에 실패했습니다.");
+            }
+        };
+
+        // location.state로 돌아온 경우 이전 리스트 유지
+        if (location.state?.inquiries) {
+            setInquiries(location.state.inquiries);
+        } else {
+            fetchInquiries();
+        }
+    }, [location.state]); // location.state 변경 시 실행
+
+
+
+    const handleSearch = async () => {
+        const token = localStorage.getItem("token");
         try {
-            const response = await axios.get(`/api/user-support?userId=${userId}`); // 아이디로 문의내역 조회회
-            setInquiries(response.data); // 아이디에 해당하는 문의내역 담기
+            const response = await axios.get(`/api/user-support/search?keyword=${keyword}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setInquiries(Array.isArray(response.data) ? response.data : []);
         } catch (e) {
             console.error("문의내역 조회 실패: ", e);
-            alert("문의내역 조회에 실패했습니다.");
-        }        
-    }
+            setErrorMessage("문의내역 조회에 실패했습니다.");
+        }
+    };
+
+    const handleReset = () => {
+        setKeyword("");
+        setInquiries(initialInquiries); // 초기 데이터로 복구
+    };
 
     const formatDateTime = (dateString) => {
         const date = new Date(dateString); // 문자열을 Date 객체로 변환
@@ -34,31 +80,34 @@ function UserSupportList() {
                 <div className="userSupport-searchBar">
                     <input
                         className="userSupport-search"
-                        placeholder="아이디를 입력하세요."
-                        value={userId}
-                        onChange={e => setUserId(e.target.value)}
+                        placeholder="제목의 일부를 입력하세요."
+                        value={keyword}
+                        onChange={e => setKeyword(e.target.value)}
                     />&emsp;
-                    <button onClick={fetchInquiries}>조회</button>&emsp;
+                    <button onClick={handleSearch}>조회</button>&emsp;
+                    <button onClick={handleReset}>초기화</button>&emsp;
                     <button onClick={() => {navigate('/UserSupportForm')}}>문의</button>
                 </div>
                 <div className="userSupport-list">
-                    {inquiries.map((inquiry, index) => (
-                        <div key={index} 
-                            className="userSupport-item"
-                            onClick={() => navigate(`/UserSupportDetail?inquiryNo=${inquiry.inquiryNo}`, { state: { userId, inquiries } })}
-                        >
-                            <div className="userSupport-inquiryTitle">
-                                <strong>[{inquiry.status}] </strong> {inquiry.title}
+                    {Array.isArray(inquiries) && inquiries.length === 0 ? (
+                        <p>문의 내역이 없습니다.</p>
+                    ) : (
+                        inquiries.map((inquiry, index) => (
+                            <div key={index} 
+                                className="userSupport-item" 
+                                onClick={() => navigate(`/UserSupportDetail?inquiryNo=${inquiry.inquiryNo}`, { state: { inquiries } })}
+                            >
+                                <div className="userSupport-inquiryTitle">
+                                    <strong>[{inquiry.status}] </strong> {inquiry.title}
+                                </div>
+                                <div className="userSupport-createdAt">
+                                    <strong>작성일: </strong> {formatDateTime(inquiry.createdDate)}
+                                </div>
                             </div>
-                            <div className="userSupport-createdAt">
-                                <strong>작성일: </strong> {formatDateTime(inquiry.createdDate)}
-                            </div>
-                            <div className="userSupport-userId">
-                                <strong>작성자: </strong> {inquiry.userId}
-                            </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
             </div>
         </div>
     )

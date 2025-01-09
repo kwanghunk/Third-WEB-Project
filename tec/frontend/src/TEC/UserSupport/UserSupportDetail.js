@@ -5,32 +5,61 @@ import '../Styles/UserSupportDetail.css';
 
 function UserSupportDetail() {
     const [inquiry, setInquiry] = useState(null);
+    const [username, setUsername] = useState(""); // JWT에서 추출한 사용자 ID
     const location = useLocation();
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const inquiryNo = searchParams.get("inquiryNo");
-    const { userId, inquiries } = location.state || {};
+    const inquiryNo = new URLSearchParams(location.search).get("inquiryNo");
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("로그인이 필요합니다.");
+            navigate("/User/Login");
+            return;
+        }
+
+        // JWT에서 사용자 ID 추출
+        const decodeToken = (token) => {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            return payload.username;
+        };
+
+        try {
+            const extractedUsername = decodeToken(token);
+            setUsername(extractedUsername);
+        } catch (e) {
+            console.error("토큰 디코딩 실패: ", e);
+            alert("잘못된 인증 정보입니다.");
+            navigate("/User/Login");
+        }
+
+        // 문의 상세 조회
         const fetchInquiryDetails = async () => {
             try {
-                const response = await axios.get(`/api/user-support/${inquiryNo}`);
+                const token = localStorage.getItem("token");
+                const response = await axios.get(`/api/user-support/${inquiryNo}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
                 setInquiry(response.data);
             } catch (e) {
                 console.error("문의내역 상세조회 실패: ", e);
                 alert("문의내역 불러오기에 실패했습니다.");
             }
-        }
+        };
+
         if (inquiryNo) fetchInquiryDetails();
-    }, [inquiryNo]);
+    }, [inquiryNo, navigate]);
 
     const handleDelete = async () => {
         const confirmed = window.confirm("삭제하시겠습니까?");
         if (!confirmed) return;
         try {
-            await axios.delete(`/api/user-support/${inquiryNo}`)
-            alert("삭제되었습니다.");
-            navigate("/UserSupportList");
+            const token = localStorage.getItem("token");
+            await axios.delete(`/api/user-support/${inquiryNo}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            alert("문의가 삭제되었습니다.");
+            navigate("/UserSupportList", { state: { inquiries: location.state?.inquiries } });
         } catch (e) {
             console.error("문의삭제 실패: ", e);
             alert("삭제에 실패했습니다.");
@@ -46,8 +75,10 @@ function UserSupportDetail() {
 
     if (!inquiry) return <p>로딩 중...</p>;
 
+    const isOwner = inquiry.username === username; // 권한 확인
+
     const handleBack = () => {
-        navigate("/UserSupportList", { state: { userId, inquiries } });
+        navigate("/UserSupportList", { state: { inquiries: location.state?.inquiries } });
     };
 
     return (
@@ -65,17 +96,32 @@ function UserSupportDetail() {
                     <strong>{inquiry.content}</strong>
                 </div>
             </div>
-            <div className="userSupport-detail-replyContainer">
-                <div className="userSupport-detail-info">
-                    <strong>{inquiry.reply != null ? formatDateTime(inquiry.modifiedDate) : ''}</strong>
+            {inquiry.reply && (
+                <div className="userSupport-detail-replyContainer">
+                    <h3>관리자 답변</h3>
+                    <div className="userSupport-detail-info">
+                        <strong>{inquiry.reply != null ? formatDateTime(inquiry.modifiedDate) : ''}</strong>
+                    </div>
+                    <div className="userSupport-detail-info">
+                        {inquiry.reply || ''}
+                    </div>
                 </div>
-                <div className="userSupport-detail-info">
-                    {inquiry.reply || ''}
-                </div>
-            </div>
+            )}
             <div className="userSupport-detail-btn">
-                <button onClick={() => navigate(`/UserSupportEdit?inquiryNo=${inquiry.inquiryNo}`, { state: { inquiry, userId, inquiries } })}>수정</button>&ensp;
-                <button onClick={handleDelete}>삭제</button>&ensp;
+                {isOwner && (
+                    <>
+                        <button
+                            onClick={() =>
+                                navigate(`/UserSupportEdit?inquiryNo=${inquiry.inquiryNo}`, {
+                                    state: { inquiry, inquiries: location.state?.inquiries },
+                                })
+                            }
+                        >
+                            수정
+                        </button>
+                        <button onClick={handleDelete}>삭제</button>
+                    </>
+                )}
                 <button onClick={handleBack}>목록</button>
             </div>
         </div>
