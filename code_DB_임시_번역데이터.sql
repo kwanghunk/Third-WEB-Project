@@ -654,6 +654,7 @@ select * from code;
 select * from faq;
 select * from user;
 select * from user_support;
+select * from savehistory;
 
 /*테이블 모든 데이터 삭제*/
 TRUNCATE TABLE code;
@@ -663,6 +664,8 @@ truncate TABLE user_support;
 /*테이블 삭제*/
 drop table user_support;
 drop table code;
+drop table user;
+drop table savehistory;
 
 /*테이블 설정 변경*/
 ALTER TABLE CODE

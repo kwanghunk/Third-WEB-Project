@@ -36,7 +36,8 @@
 
 
 /* 번역칸 전체 */
-.content-mid-translateDiv {
+.content-mid-translateDiv,
+.content-bottom-historyDiv {
   display: flex;
   gap: 50px;
   flex-wrap: wrap; /* 창 폭이 줄어들면 줄 바꿈 */
@@ -54,10 +55,12 @@
 
 /* 번역 결과, 번역 요청 큰 칸 */
 .content-mid-translateDiv-left,
-.content-mid-translateDiv-right {
+.content-mid-translateDiv-right,
+.content-bottom-historyDiv-left,
+.content-bottom-historyDiv-right {
   border: 1px solid lightgray;
   padding: 10px;
-  width: 850px;
+  width: 700px;
   background: white;
   border-radius: 10px;
   height: 300px;
@@ -73,14 +76,25 @@
 
 /* 창 폭 768px 이하이면 적용용 */
 @media screen and (max-width: 768px) {
-.content-mid-translateDiv {
+.content-mid-translateDiv,
+.content-bottom-historyDiv {
     flex-direction: column;
 }
 
 .content-mid-translateDiv-left,
-.content-mid-translateDiv-right {
+.content-mid-translateDiv-right,
+.content-bottom-historyDiv-left,
+.content-bottom-historyDiv-right {
     width: 98%;
 }
+}
+
+.content-bottom-historyDiv-title {
+  display: flex;
+  margin-bottom: 5px;
+  justify-content: left;
+  font-size: 24px;
+  font-weight: 800;
 }
 
 /* 번역 버튼 */
@@ -104,4 +118,20 @@
 
 .translate-Btn:hover {
   background-color: rgb(255, 196, 0);
+}
+
+.historys-item {
+  text-align: left;
+  padding: 5px;
+  cursor: pointer;
+  background: white;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space:nowrap;
+}
+.historys-item:hover {
+  background: #e9e9e9;
+}
+.historys-item:active {
+  background: #c9c9c9;
 }

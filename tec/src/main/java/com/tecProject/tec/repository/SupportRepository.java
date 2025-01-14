@@ -12,7 +12,6 @@ import com.tecProject.tec.domain.UserSupport;
 public interface SupportRepository extends JpaRepository<UserSupport, Integer> {
 
 	// 문의내역 전체조회(사용자)
-	@Query("SELECT u FROM UserSupport u WHERE u.username = :username AND u.isDeleted = 'N'")
 	List<UserSupport> findByUsernameAndIsDeleted(String username, String isDeleted);
 	
     // 제목 키워드로 삭제되지 않은 문의 조회

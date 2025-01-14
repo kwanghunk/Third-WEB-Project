@@ -44,7 +44,7 @@ function UserSupportForm() {
             const token = localStorage.getItem("token");
             await axios.post(
                 "/api/user-support",
-                { userId: username, title, content, type: 1 },
+                { username: username, title, content, type: 1 },
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }

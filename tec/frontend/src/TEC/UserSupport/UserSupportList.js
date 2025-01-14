@@ -1,12 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import '../Styles/UserSupportList.css';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 function UserSupportList() {
     const navigate = useNavigate();
-    const location = useLocation();
     const [initialInquiries, setInitialInquiries] = useState([]); // 초기 목록
     const [inquiries, setInquiries] = useState([]); // 문의내역 상태
     const [keyword, setKeyword] = useState(""); // 키워드 상태 추가
@@ -29,22 +28,17 @@ function UserSupportList() {
                 const response = await axios.get("/api/user-support", {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                const data = Array.isArray(response.data) ? response.data : [];
-                setInitialInquiries(data); // 초기 데이터 저장
-                setInquiries(data); // 현재 데이터에도 초기값 설정
+                const activeInquiries = response.data.filter((inquiry) => inquiry.isDeleted === "N"); // 삭제되지 않은 데이터만 표시
+                setInitialInquiries(activeInquiries); // 초기 데이터 저장
+                setInquiries(activeInquiries); // 현재 데이터에도 초기값 설정
             } catch (e) {
                 console.error("문의내역 조회 실패: ", e);
                 setErrorMessage("문의내역 조회에 실패했습니다.");
             }
         };
 
-        // location.state로 돌아온 경우 이전 리스트 유지
-        if (location.state?.inquiries) {
-            setInquiries(location.state.inquiries);
-        } else {
-            fetchInquiries();
-        }
-    }, [location.state]); // location.state 변경 시 실행
+        fetchInquiries();
+    }, []); 
 
 
 

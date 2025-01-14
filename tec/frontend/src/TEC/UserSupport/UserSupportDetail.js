@@ -59,7 +59,7 @@ function UserSupportDetail() {
                 headers: { Authorization: `Bearer ${token}` },
             });
             alert("문의가 삭제되었습니다.");
-            navigate("/UserSupportList", { state: { inquiries: location.state?.inquiries } });
+            navigate("/UserSupportList");
         } catch (e) {
             console.error("문의삭제 실패: ", e);
             alert("삭제에 실패했습니다.");
