@@ -17,7 +17,7 @@ const PasswordChange = () => {
   // 페이지 이동을 위한 useNavigate 훅
   const navigate = useNavigate();
   // 사용자 ID를 로컬 스토리지에서 가져오기
-  const userId = localStorage.getItem("username");
+  const username = localStorage.getItem("username");
 
   // 입력값 변경 시 상태 업데이트
   const handleChange = (e) => {
@@ -38,7 +38,7 @@ const PasswordChange = () => {
 
     try {
       // 서버로 비밀번호 변경 요청
-      const response = await axios.put(`/user/changePassword/${userId}`, {
+      const response = await axios.put(`/user/changePassword/${username}`, {
         currentPassword: passwords.currentPassword,
         newPassword: passwords.newPassword,
       });
@@ -48,7 +48,6 @@ const PasswordChange = () => {
       setShowSuccess(true); // 성공 메시지 표시
       setIsLoading(false); // 로딩 상태 비활성화
       localStorage.clear(); // 비밀번호 변경 후 로컬 스토리지 삭제
-      sessionStorage.clear(); // 세션 스토리지 삭제
       window.alert("비밀번호 변경이 완료되었습니다.");
       navigate("/"); // 메인 페이지로 이동
     } catch (error) {

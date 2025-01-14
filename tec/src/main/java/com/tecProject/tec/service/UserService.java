@@ -1,6 +1,7 @@
 package com.tecProject.tec.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tecProject.tec.domain.User;
@@ -10,7 +11,13 @@ import com.tecProject.tec.repository.UserRepository;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    	this.userRepository = userRepository;
+    	this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -35,9 +42,12 @@ public class UserService {
 
         return userRepository.save(existingUser);
     }
-    public boolean changePassword(int userId, String currentPassword, String newPassword) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    /*
+    public boolean changePassword(String username, String currentPassword, String newPassword) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found"); // 사용자 없을 경우 예외 처리
+        }
 
         // 현재 비밀번호 확인
         if (!user.getPassword().equals(currentPassword)) {
@@ -48,7 +58,24 @@ public class UserService {
         user.setPassword(newPassword);
         userRepository.save(user);
         return true;
-    }
+    }*/
     
+    public boolean changePassword(String username, String currentPassword, String newPassword) {
+        User user = userRepository.findByUsername(username);
+        
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        // 현재 비밀번호 확인
+        if (!bCryptPasswordEncoder.matches(currentPassword, user.getPassword())) {
+            return false;
+        }
+
+        // 새 비밀번호 암호화 후 저장
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return true;
+    }
 
 }

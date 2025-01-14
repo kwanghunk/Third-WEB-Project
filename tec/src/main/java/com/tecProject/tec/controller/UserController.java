@@ -70,13 +70,13 @@ public class UserController {
         }
     }
     
-    @PutMapping("/changePassword/{userId}")
-    public ResponseEntity<?> changePassword(@PathVariable("userId") int userId, @RequestBody Map<String, String> passwords) {
+    @PutMapping("/changePassword/{username}")
+    public ResponseEntity<?> changePassword(@PathVariable("username") String username, @RequestBody Map<String, String> passwords) {
         try {
             String currentPassword = passwords.get("currentPassword");
             String newPassword = passwords.get("newPassword");
 
-            boolean isPasswordChanged = userService.changePassword(userId, currentPassword, newPassword);
+            boolean isPasswordChanged = userService.changePassword(username, currentPassword, newPassword);
 
             if (isPasswordChanged) {
                 return ResponseEntity.ok("Password changed successfully.");
