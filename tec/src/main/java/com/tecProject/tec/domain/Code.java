@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 public class Code {
 	
-	//번역코드의 고유식별자_Primary Key
+	//코드 ID (Primary Key)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "CODE_ID", nullable = false)
@@ -25,7 +25,7 @@ public class Code {
 		@Column(name = "ORIGIN_CODE", length = 100, nullable = true, unique = true)
 		private String originCode;
 		
-		//번역결과 JSON
+		//번역결과코드
 		@Column(name = "TRANSLATE_CODE", nullable = false, columnDefinition = "TEXT")
 		private String translateCode;
 }

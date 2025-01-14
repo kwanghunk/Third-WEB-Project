@@ -1,4 +1,4 @@
-package com.tecProject.tec.jwt;
+package com.tecProject.tec.auth;
 
 import java.util.Collection;
 import java.util.Iterator;

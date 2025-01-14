@@ -8,16 +8,50 @@ function TranslateComponent() {
   const [translation, setTranslation] = useState(""); // 번역결과
   const [language, setLanguage] = useState("Java"); // 기본값 "JAVA"
   const [activeDiv, setActiveDiv] = useState(null); // 클릭된 번역 영역
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 활성/비활성 상태
+  const [isModalOpen, setIsModalOpen] = useState(false); // 기록 모달 활성/비활성 상태
+
+  const [ipInfo, setIpInfo] = useState({ ip: "로딩 중...", userType: "로딩 중..." }); // 클라이언트 IP 정보 초기값
+  const [loading, setLoading] = useState(true); // Ip로딩 상태 관리
+
+
   const [historys, setHistorys] = useState([]); // 번역 히스토리
   const [selectedItem, setSelectedItem] = useState(null); // 선택된 히스토리 항목
   const [historyKeyword, setHistoryKeyword] = useState("");
   const [historyTranslation, setHistoryTranslation] = useState("");
-  const [username, setUsername] = useState("");
 
+  // Monaco Editor의 내용을 상태로 저장
   const handleEditorChange = (value) => {
-    setKeyword(value); // Monaco Editor의 내용을 상태로 저장
+    setKeyword(value);
   }
+
+  // 서버로부터 IP와 회원 여부 정보 가져오기
+  const fetchIpInfo = async () => {
+    try {
+      setLoading(true); // 로딩 시작
+      const response = await axios.get("/ip/check-ip", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token") || ""}`, // JWT 토큰
+        },
+      });
+
+      // 서버에서 반환된 데이터를 상태에 저장
+      const data = response.data.split(", ");
+      setIpInfo({
+        ip: data[0].split(": ")[1], // 클라이언트 IP
+        userType: data[2].split(": ")[1], // 회원/비회원 여부
+      });
+    } catch (error) {
+      console.error("IP 정보 가져오기 실패: ", error.response?.data || error.message);
+      setIpInfo({ ip: "오류 발생", userType: "비회원" }); // 실패 시 기본값 설정
+    } finally {
+      setLoading(false); // 로딩 종료
+    }
+  };
+  
+  // 컴포넌트 마운트 시 IP 정보 가져오기
+  useEffect(() => {
+    fetchIpInfo();
+  }, []);
 
   // 번역 요청
   const handleTranslate = async () => {
@@ -35,7 +69,7 @@ function TranslateComponent() {
       setTranslation("번역에 실패했습니다."); // 오류 메시지 처리
     }
   };
-  
+
   // 클릭된 번역 이벤트
   useEffect(() => {
     const savedHistory = JSON.parse(sessionStorage.getItem("translationHistory")) || [];// sessionStorage에서 히스토리 불러오기
@@ -51,7 +85,6 @@ function TranslateComponent() {
       return () => {
         document.removeEventListener('click', handleOutsideClick);
   };
-
 }, []);
 
   // 히스토리 업데이트 및 저장소 동기화
@@ -61,7 +94,7 @@ function TranslateComponent() {
     sessionStorage.setItem("translationHistory", JSON.stringify(updatedHistory));
   };
 
-  // 모달 열기/닫기
+  // 기록 모달 열기/닫기
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   
@@ -101,6 +134,7 @@ function TranslateComponent() {
         alert("저장할 번역 데이터가 없습니다.");
         return;
       }
+
       // 저장 요청
       await axios.post("/api/history", dataToSave,
         { headers: { Authorization: `Bearer ${token}` }} // JWT 토큰 포함
@@ -115,6 +149,13 @@ function TranslateComponent() {
   return (
     <div className="content-all">
       <div className="content-top-buttonDiv">
+        {loading ? (
+          <p>클라이언트 IP 정보 로딩 중...</p>
+        ) : (
+          <p>
+            클라이언트 IP: {ipInfo.ip} / 사용자: {ipInfo.userType}
+          </p>
+        )}
         <select 
           className="select-language"
           value={language}

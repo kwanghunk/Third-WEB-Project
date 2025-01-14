@@ -18,13 +18,13 @@ import java.time.LocalDateTime;
 
 public class SaveHistory {
 	
-	//번역요청 고유키(시퀀스)
+	//요청ID (Primary Key)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "SAVEHISTORY_NO", nullable = false)
 	private Integer saveHistoryNo;
 	
-		//사용자ID
+		//회원ID
 		@Column(name = "USER_NAME", length = 30)
 	    private String username;
 		

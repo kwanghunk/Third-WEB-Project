@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,21 +16,27 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import com.tecProject.tec.jwt.JWTFilter;
-import com.tecProject.tec.jwt.JWTUtil;
-import com.tecProject.tec.jwt.LoginFilter;
+import com.tecProject.tec.auth.IpUtil;
+import com.tecProject.tec.auth.JWTFilter;
+import com.tecProject.tec.auth.JWTUtil;
+import com.tecProject.tec.auth.LoginFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 	
 	private final AuthenticationConfiguration authenticationConfiguration;
+	
 	//JWTUtil 주입
 	private final JWTUtil jwtUtil;
 	
-	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
+	//IpUril 주입
+	private final IpUtil ipUtil;
+	
+	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, IpUtil ipUtil) {
 		this.authenticationConfiguration = authenticationConfiguration;
 		this.jwtUtil = jwtUtil;
+		this.ipUtil = ipUtil;
 	}
 
 	@Bean
@@ -40,7 +47,7 @@ public class SecurityConfig {
 	//비밀번호 암호화
     @Bean
     public BCryptPasswordEncoder BCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder(); // 비밀번호 안전하게 암호화
+        return new BCryptPasswordEncoder(); //비밀번호 안전하게 암호화
     }
     
     //보안설정 관리 함수
@@ -61,7 +68,7 @@ public class SecurityConfig {
             }));
             
         http
-            // 기본 로그인 폼 비활성화 및 REST API 방식 지원
+            //기본 로그인 폼 비활성화 및 REST API 방식 지원
             .formLogin(form -> form.disable());
             
         http
@@ -85,9 +92,17 @@ public class SecurityConfig {
         http
 	        //요청에 대한 허가 규칙 설정
 	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/api/code", "/admin/code/**", "/user/**", "/Admin/faqs", "/api/user-support/**", "/join/**").permitAll() // 접근 할 수 있는 URL
-	            .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자 전용 API
-	            .anyRequest().authenticated() // 위에서 허용하지 않은 나머지 요청은 로그인해야 접근 가능
+	        	.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+	            .requestMatchers(
+	            				 "/api/code/**",
+	            			     "/admin/code/**", "/ip/check-ip", 
+	            			     "/user/**", "/admin/faqs", 
+	            			     "/api/user-support/**", 
+	            			     "/join/**","/faq/faqs",
+	            			     "/faq/**","/faq/check-admin")
+	            .permitAll() // 접근 할 수 있는 URL
+	            .requestMatchers("/admin/**","/Admin/faqs").hasRole("ADMIN") // 관리자 전용 API
+	            .anyRequest().authenticated() //위에서 허용하지 않은 나머지 요청은 로그인해야 접근 가능
 	        );
         
         http
@@ -95,7 +110,7 @@ public class SecurityConfig {
         	.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         
         http
-        	// 커스텀한 UsernamePasswordAuthenticationFilter 등록 (AuthenticationManager()와 JWTUtil 인수 전달)
+        	//커스텀한 UsernamePasswordAuthenticationFilter 등록 (AuthenticationManager()와 JWTUtil 인수 전달)
         	.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
         
         http

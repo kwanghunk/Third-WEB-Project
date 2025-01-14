@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 
 public class User {
 	
-	//사용자 번호
+	//회원번호 (Primary Key)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "USER_NO")
@@ -35,6 +35,11 @@ public class User {
 		//회원타입 (ROLE_ADMIN=관리자, ROLE_USER=회원)
 		@Column(name = "USER_TYPE", nullable = false)
 		private String userType;
+		
+		//로그인여부 (true = 회원, false = 비회원 : 회원 무조건 1 반환) *IP때문에 추가
+		@Builder.Default //빌더초기화해제
+		@Column(name = "IS_MEMBER", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
+		private Boolean isMember = true;
 		
 		//사용자 아이디
 		@Column(name = "USER_NAME", nullable = false, unique = true, length = 50)
@@ -61,8 +66,8 @@ public class User {
 		@CreatedDate
 		private LocalDateTime createDate;
 		
-		//비밀번호 변경일자
-		@Column(name = "CHANGE_PW_DATE")
+		//비밀번호 변경일자(3개월주기 변경)
+		@Column(name = "CHANGE_PW_DATE",  nullable = false)
 		@LastModifiedDate
 		private LocalDateTime changePwDate;
 		

@@ -7,9 +7,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.tecProject.tec.auth.JWTUtil;
 import com.tecProject.tec.domain.User;
 import com.tecProject.tec.dto.LoginDTO;
-import com.tecProject.tec.jwt.JWTUtil;
 import com.tecProject.tec.repository.UserRepository;
 
 @Service
@@ -42,9 +42,11 @@ public class LoginService {
 		response.put("token", token);
 		response.put("username", user.getUsername());
 		response.put("userType", user.getUserType());
+		response.put("isMember", user.getIsMember() != null && user.getIsMember() ? "true" : "false");
 		System.out.println("token: " + token);
 		System.out.println("username: " + user.getUsername());
 		System.out.println("userType: " + user.getUserType());
+		System.out.println("isMember: " + user.getIsMember());
 		return response;
 	}
 }

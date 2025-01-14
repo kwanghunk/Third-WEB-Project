@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tecProject.tec.auth.JWTUtil;
 import com.tecProject.tec.dto.LoginDTO;
-import com.tecProject.tec.jwt.JWTUtil;
 import com.tecProject.tec.service.LoginService;
 
 @RestController
