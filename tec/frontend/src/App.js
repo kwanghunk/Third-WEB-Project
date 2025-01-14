@@ -13,6 +13,9 @@ import UserSupportDetail from './TEC/UserSupport/UserSupportDetail';
 import UserSupportEdit from './TEC/UserSupport/UserSupportEdit';
 import Login from './TEC/User/Login';
 import SignUp from './TEC/User/SignUp';
+import MyPage from './TEC/User/MyPage';
+import PasswordChange from './TEC/User/PasswordChange';
+import Profile from './TEC/User/Profile';
 
 
 
@@ -42,6 +45,9 @@ const App = () => {
           <Route path="/UserSupportEdit" element={<UserSupportEdit />} />
           <Route path="/User/Login" element={<Login setUser={setUser} />} />
           <Route path="/User/SignUp" element={<SignUp />} />
+          <Route path="/User/MyPage" element={<MyPage />} />
+          <Route path="/User/PasswordChange" element={<PasswordChange />} />
+          <Route path="/User/Profile" element={<Profile />} />
         </Routes>
       </div>
     </div>

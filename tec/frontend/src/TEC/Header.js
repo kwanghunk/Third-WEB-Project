@@ -74,7 +74,7 @@ function Header({ user, setUser }) {
         {user ? (
 					<span className={"header-login"}>
             <span className="login-content">{user}님</span>
-            <span className="login-content" onClick={() => { navigate('/mypage') }}>마이페이지</span>
+            <span className="login-content" onClick={() => { navigate('/User/MyPage') }}>마이페이지</span>
             <span className="login-content" onClick={handleLogout}>로그아웃</span>
           </span>
         ) : (
