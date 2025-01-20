@@ -81,12 +81,21 @@ function UserSupportDetail() {
         navigate("/UserSupportList", { state: { inquiries: location.state?.inquiries } });
     };
 
+    const CATEGORY_LABELS = {
+        GENERAL: "일반 문의",
+        PAYMENT: "결제/환불 문의",
+        ACCOUNT: "계정 문의",
+        TECH_SUPPORT: "기술 지원",
+        FEEDBACK: "제안 및 피드백",
+        OTHER: "기타"
+    };
+
     return (
         <div className="userSupport-detail-all">
             <h2 className="userSupport-detail-hTitle">문의 내용</h2>
             <div className="userSupport-detail-container">
                 <div className="userSupport-detail-title">
-                    <strong>{inquiry.title}</strong>
+                    <strong>[{inquiry.status}] </strong>[{CATEGORY_LABELS[inquiry.category]}] {inquiry.title}
                 </div>
                 <div className="userSupport-detail-info">
                     <strong>{inquiry.userId}</strong>

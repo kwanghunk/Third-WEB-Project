@@ -7,6 +7,7 @@ function UserSupportForm() {
     const [username, setUsername] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [category, setCategory] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
     // 로그인 사용자 정보 가져오기
@@ -39,12 +40,16 @@ function UserSupportForm() {
         setErrorMessage("");
         const confirmed = window.confirm("등록하시겠습니까?");
         if (!confirmed) return;
+        if (!title || !content) {
+            alert("내용을 작성하세요.");
+            return;
+        }
 
         try {
             const token = localStorage.getItem("token");
             await axios.post(
                 "/api/user-support",
-                { username: username, title, content, type: 1 },
+                { category: category, title, content },
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
@@ -74,6 +79,17 @@ function UserSupportForm() {
                         readOnly
                         style={{ backgroundColor: "#f0f0f0", cursor: "not-allowed" }}
                     />
+                </p>
+                <p>
+                    <select value={category}
+                    onChange={(e) => setCategory(e.target.value)}>
+                        <option value="GENERAL">일반 문의</option>
+                        <option value="PAYMENT">결제/환불 문의</option>
+                        <option value="ACCOUONT">계정 문의</option>
+                        <option value="TECH_SUPPORT">기술 지원</option>
+                        <option value="FEEDBACK">제안 및 피드백</option>
+                        <option value="OTHER">기타</option>
+                    </select>
                 </p>
                 <p>
                     <input

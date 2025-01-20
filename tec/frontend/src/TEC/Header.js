@@ -9,19 +9,27 @@ function Header({ user, setUser }) {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false); // 검색 모달 추가
+  const [historys, setHistorys] = useState([]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("username");
-    if (storedUser) {
+    if (!storedUser) {
+      sessionStorage.removeItem("translationHistory")
+      setHistorys([]);
+    } else {
       setUser(storedUser);
     }
-  }, [setUser]);
+  }, [user]);
 
   const handleLogout = () => {
     localStorage.clear(); // 토큰과 사용자 정보 제거
+    sessionStorage.removeItem("translationHistory");
+    setHistorys([]);
+    if (!sessionStorage.getItem("translationHistory")) { setHistorys([]); }
     setUser(null); // 상태 초기화
     alert("로그아웃 되었습니다!");
-    navigate('/');
+    window.location.reload(); // 새로고침
+    //navigate('/');
   };
 
   return (

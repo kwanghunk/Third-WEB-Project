@@ -50,4 +50,7 @@ public class SaveHistory {
 		@Lob //긴 설명 저장하는데 사용
 		@Column(name = "CODE_DESCRIPTION", columnDefinition = "TEXT")
 	    private String codeDescription;
+		
+		@Column(name = "HISTORY_TITLE", length = 255, nullable = false)
+		private String historyTitle;
 }

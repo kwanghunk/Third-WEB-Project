@@ -660,19 +660,27 @@ select * from savehistory;
 TRUNCATE TABLE code;
 TRUNCATE TABLE faq;
 truncate TABLE user_support;
+truncate TABLE savehistory;
 
 /*테이블 삭제*/
 drop table user_support;
 drop table code;
 drop table user;
 drop table savehistory;
+drop table USER_ANSWER;
 
 /*테이블 설정 변경*/
 ALTER TABLE CODE
 MODIFY COLUMN TRANSLATE_CODE TEXT NOT NULL;
-
 ALTER TABLE faq
 MODIFY COLUMN created_date TIMESTAMP NOT NULL;
+ALTER TABLE savehistory 
+MODIFY COLUMN history_title varchar(255) NOT NULL;
 
+/* 컬럼 추가 */
+ALTER TABLE savehistory 
+ADD COLUMN history_title varchar(255);
+
+ALTER TABLE user_support DROP COLUMN type;
 commit;
 

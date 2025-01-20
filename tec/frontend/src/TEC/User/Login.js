@@ -10,6 +10,7 @@ const Login = ({ setUser }) => {
   });
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [hisotorys, setHistorys] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,8 +43,8 @@ const Login = ({ setUser }) => {
       localStorage.setItem("username", username);
       localStorage.setItem("role", role);
 
-      // 임시 토큰 확인
-      alert(`토큰 생성됨: ${token}`);
+      sessionStorage.removeItem("translationHistory");
+      setHistorys([]);
       setUser(username); // 사용자 정보 업데이트
       setMessage("로그인에 성공했습니다!");
       setTimeout(() => navigate("/"), 2000); // 메인 페이지로 이동

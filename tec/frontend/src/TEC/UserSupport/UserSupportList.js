@@ -66,6 +66,15 @@ function UserSupportList() {
         const formattedTime = date.toTimeString().slice(0, 5); // 시간 부분 추출
         return `${formattedDate} ${formattedTime}`;
     }
+
+    const CATEGORY_LABELS = {
+        GENERAL: "일반 문의",
+        PAYMENT: "결제/환불 문의",
+        ACCOUNT: "계정 문의",
+        TECH_SUPPORT: "기술 지원",
+        FEEDBACK: "제안 및 피드백",
+        OTHER: "기타"
+    };
     
     return (
         <div className="userSupport-all">
@@ -92,7 +101,7 @@ function UserSupportList() {
                                 onClick={() => navigate(`/UserSupportDetail?inquiryNo=${inquiry.inquiryNo}`, { state: { inquiries } })}
                             >
                                 <div className="userSupport-inquiryTitle">
-                                    <strong>[{inquiry.status}] </strong> {inquiry.title}
+                                    <strong>[{inquiry.status}] </strong>[{CATEGORY_LABELS[inquiry.category]}] {inquiry.title}
                                 </div>
                                 <div className="userSupport-createdAt">
                                     <strong>작성일: </strong> {formatDateTime(inquiry.createdDate)}

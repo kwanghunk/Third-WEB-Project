@@ -9,6 +9,7 @@ function UserSupportEdit() {
     const [username, setUsername] = useState(""); // 회원 ID
     const [title, setTitle] = useState(inquiry?.title || ""); // 제목
     const [content, setContent] = useState(inquiry?.content || ""); // 내용
+    const [category, setCategory] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
     // JWT에서 사용자 정보 가져오기
@@ -44,15 +45,19 @@ function UserSupportEdit() {
 
         try {
             const token = localStorage.getItem("token");
+            if (!token) {
+                setErrorMessage("로그인이 필요합니다.");
+                return;
+            }
             await axios.put(
                 `/api/user-support/${inquiry.inquiryNo}`,
-                { title, content },
+                { title, content, category },
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
             alert("문의가 성공적으로 수정되었습니다.");
-            navigate(`/UserSupportDetail?inquiryNo=${inquiry.inquiryNo}`, { state: { inquiry: { ...inquiry, title, content } } });
+            navigate(`/UserSupportDetail?inquiryNo=${inquiry.inquiryNo}`, { state: { inquiry: { ...inquiry, title, content, category } } });
         } catch (e) {
             console.error("문의 수정 실패: ", e);
             setErrorMessage("문의 수정에 실패했습니다. 다시 시도해주세요.");
@@ -75,6 +80,17 @@ function UserSupportEdit() {
                     style={{ backgroundColor: "#f0f0f0", cursor: "not-allowed" }}
                 />
             </p>
+            <p>
+                    <select value={category}
+                    onChange={(e) => setCategory(e.target.value)}>
+                        <option value="GENERAL">일반 문의</option>
+                        <option value="PAYMENT">결제/환불 문의</option>
+                        <option value="ACCOUONT">계정 문의</option>
+                        <option value="TECH_SUPPORT">기술 지원</option>
+                        <option value="FEEDBACK">제안 및 피드백</option>
+                        <option value="OTHER">기타</option>
+                    </select>
+                </p>
             <p>
                 <input
                     placeholder="제목"

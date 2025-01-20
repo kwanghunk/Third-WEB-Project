@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tecProject.tec.domain.UserSupport;
+import com.tecProject.tec.dto.UserSupportDTO;
 import com.tecProject.tec.service.SupportService;
 
 @RestController
@@ -33,31 +34,45 @@ public class SupportController {
     
     // 문의 등록(사용자)
     @PostMapping
-    private ResponseEntity<?> createInquiry(@RequestBody UserSupport userSupport) {
+    private ResponseEntity<?> createInquiry(@RequestBody UserSupportDTO userSupportDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 이용 가능합니다.");
         }
+        
+        // 필수 값 검증
+        if (userSupportDTO.getTitle() == null || userSupportDTO.getTitle().trim().isEmpty()) {
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("문의 제목을 입력하세요.");
+        }
+        if (userSupportDTO.getContent() == null || userSupportDTO.getContent().trim().isEmpty()) {
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("문의 내용을 입력하세요.");
+        }
+        if (userSupportDTO.getCategory() == null) {
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("카테고리를 선택해주세요.");
+        }
         String username = authentication.getName(); // JWT에서 username 추출
-        userSupport.setUsername(username); // 사용자 ID 설정
-        UserSupport savedInquiry = supportService.createInquiry(userSupport);
+        UserSupportDTO createdInquiry = supportService.createInquiry(userSupportDTO, username);
 
-        return ResponseEntity.ok(savedInquiry);
+        return ResponseEntity.ok(createdInquiry);
     }
     
     // 문의 수정(사용자)
     @PutMapping("/{inquiryNo}")
     private ResponseEntity<?> updateInquiry(@PathVariable("inquiryNo") int inquiryNo,
-                                            @RequestBody UserSupport updatedInquiry) {
+                                            @RequestBody UserSupportDTO updatedInquiry) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 이용 가능합니다.");
         }
-
         String username = authentication.getName(); // JWT에서 username 추출
-
-        // 서비스 호출하여 문의 수정
-        Optional<UserSupport> inquiry = supportService.updateInquiry(inquiryNo, username, updatedInquiry.getTitle(), updatedInquiry.getContent());
+        // 서비스 호출
+        Optional<UserSupport> inquiry = supportService.updateInquiry(
+                inquiryNo,
+                username,
+                updatedInquiry.getTitle(),
+                updatedInquiry.getContent(),
+                updatedInquiry.getCategory()
+        );
         if (inquiry.isPresent()) {
             return ResponseEntity.ok(inquiry.get());
         } else {

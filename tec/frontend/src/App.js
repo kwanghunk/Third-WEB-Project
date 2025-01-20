@@ -16,6 +16,8 @@ import SignUp from './TEC/User/SignUp';
 import MyPage from './TEC/User/MyPage';
 import PasswordChange from './TEC/User/PasswordChange';
 import Profile from './TEC/User/Profile';
+import SavedHistoryList from './TEC/User/SavedHistoryList';
+import SavedHistoryDetail from './TEC/User/SavedHistoryDetail';
 
 
 
@@ -48,6 +50,8 @@ const App = () => {
           <Route path="/User/MyPage" element={<MyPage />} />
           <Route path="/User/PasswordChange" element={<PasswordChange />} />
           <Route path="/User/Profile" element={<Profile />} />
+          <Route path="/User/savedHistoryList" element={<SavedHistoryList />} />
+          <Route path="/User/savedHistoryDetail/:id" element={<SavedHistoryDetail />} />
         </Routes>
       </div>
     </div>

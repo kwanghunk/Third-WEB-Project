@@ -11,12 +11,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import com.tecProject.tec.auth.IpUtil;
 import com.tecProject.tec.auth.JWTFilter;
 import com.tecProject.tec.auth.JWTUtil;
 import com.tecProject.tec.auth.LoginFilter;
@@ -30,13 +28,9 @@ public class SecurityConfig {
 	//JWTUtil 주입
 	private final JWTUtil jwtUtil;
 	
-	//IpUril 주입
-	private final IpUtil ipUtil;
-	
-	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, IpUtil ipUtil) {
+	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
 		this.authenticationConfiguration = authenticationConfiguration;
 		this.jwtUtil = jwtUtil;
-		this.ipUtil = ipUtil;
 	}
 
 	@Bean
@@ -95,6 +89,7 @@ public class SecurityConfig {
 	        	.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 	            .requestMatchers(
 	            				 "/api/code/**",
+	            				 "/api/history/**",
 	            			     "/admin/code/**", "/ip/check-ip", 
 	            			     "/user/**", "/admin/faqs", 
 	            			     "/api/user-support/**", 

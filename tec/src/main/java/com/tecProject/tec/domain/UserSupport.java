@@ -7,6 +7,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,12 +35,8 @@ public class UserSupport {
 	private int inquiryNo;
 	
 		//회원 ID
-		@Column(name = "USER_NAME", nullable = false, length = 12)
+		@Column(name = "USER_NAME", nullable = false, length = 50)
 		private String username;
-		
-		//카테고리 타입
-		@Column(name = "TYPE", nullable = false)
-		private int type;
 		
 		//문의글 제목
 		@Column(name = "TITLE", nullable = false, length = 100)
@@ -49,8 +47,12 @@ public class UserSupport {
 		private String content;
 		
 		//관리자 답변
-		@Column(name = "reply", columnDefinition = "TEXT")
+		@Column(name = "REPLY", columnDefinition = "TEXT")
 		private String reply;
+		
+		//관리자 답변 작성 일자
+		@Column(name = "REPLY_DATE")
+		private LocalDateTime replyDate;
 		
 		//문의 상태: 대기, 처리 중, 답변 완료
 		@Column(name = "STATUS", nullable = false)
@@ -62,8 +64,7 @@ public class UserSupport {
 		private LocalDateTime createdDate;
 		
 		//수정 일자
-		@Column(name = "MODIFIED_DATE", nullable = false)
-		@LastModifiedDate
+		@Column(name = "MODIFIED_DATE")
 		private LocalDateTime modifiedDate;
 		
 		//글 삭제여부
@@ -72,6 +73,29 @@ public class UserSupport {
 		
 		//글 삭제일자
 		@Column(name = "DELETED_DATE")
-		@LastModifiedDate
 		private LocalDateTime deletedDate;
+		
+		//카테고리 타입
+		@Column(name = "CATEGORY", nullable = false)
+		@Enumerated(EnumType.STRING)
+		private InquiryCategory category;
+		
+		public enum InquiryCategory {
+			GENERAL("일반 문의"),
+			PAYMENT("결제/환불 문의"),
+			ACCOUNT("계정 문의"),
+			TECH_SUPPORT("기술 지원"),
+			FEEDBACK("제안 및 피드백"),
+			OTHER("기타");
+			
+			private String description;
+			
+			InquiryCategory(String description) {
+				this.description = description;
+			}
+			
+			public String getDescription() {
+				return description;
+			}
+		}
 }
