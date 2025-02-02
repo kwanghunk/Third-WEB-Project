@@ -1,30 +1,25 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Editor from "@monaco-editor/react";
+import Editor from "@monaco-editor/react"
+;
 import './Styles/TranslateComponent.css';
-import { LiaUnlinkSolid } from "react-icons/lia";
-import { Link } from "react-router-dom";
+
+import { fetchHistory, updateHistory, saveTranslation, downloadTranslation } from "./MainParts/HistoryManager";
 
 function TranslateComponent() {
   const [keyword, setKeyword] = useState(""); // 입력창 입력값
   const [translation, setTranslation] = useState(""); // 번역결과
   const [language, setLanguage] = useState("Java"); // 기본값 "JAVA"
-  const [activeDiv, setActiveDiv] = useState(null); // 클릭된 번역 영역
-  const [isModalOpen, setIsModalOpen] = useState(false); // 기록 모달 활성/비활성 상태
-
-  const [ipInfo, setIpInfo] = useState({ ip: "로딩 중...", userType: "로딩 중..." }); // 클라이언트 IP 정보 초기값
-  const [loading, setLoading] = useState(true); // Ip로딩 상태 관리
-
-
   const [historys, setHistorys] = useState([]); // 번역 히스토리
+  const [isModalOpen, setIsModalOpen] = useState(false); // 기록 모달 활성/비활성 상태
+  const [isHistoryDivOpen, setIsHistoryDivOpen] = useState(false); // HistoryDiv 활성/비활성 상태
+  
   const [selectedItem, setSelectedItem] = useState(null); // 선택된 히스토리 항목
   const [historyKeyword, setHistoryKeyword] = useState("");
   const [historyTranslation, setHistoryTranslation] = useState("");
-
-  // Monaco Editor의 내용을 상태로 저장
-  const handleEditorChange = (value) => {
-    setKeyword(value);
-  }
+  const [ipInfo, setIpInfo] = useState({ ip: "로딩 중...", userType: "로딩 중..." }); // 클라이언트 IP 정보 초기값
+  const [loading, setLoading] = useState(true); // Ip로딩 상태 관리
+  const [activeDiv, setActiveDiv] = useState(null); // 클릭된 번역 영역
 
   // 서버로부터 IP와 회원 여부 정보 가져오기
   const fetchIpInfo = async () => {
@@ -32,7 +27,7 @@ function TranslateComponent() {
       setLoading(true); // 로딩 시작
       const response = await axios.get("/ip/check-ip", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token") || ""}`, // JWT 토큰
+          Authorization: `Bearer ${localStorage.getItem("accesstoken") || ""}`, // JWT 토큰
         },
       });
 
@@ -50,22 +45,100 @@ function TranslateComponent() {
     }
   };
 
+  // 파일 업로드 처리 함수
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const validExtensions = ['java', 'js', 'txt', 'py']; // 업로드 허용한 파일 확장자
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    if (!validExtensions.includes(fileExtension)) {
+      alert("첨부할 수 있는 확장자 파일이 아닙니다.");
+      return;
+    }
+    // 파일 내용을 읽어와 'keyword' 상태에 저장
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setKeyword(e.target.result); // 파일 내용을 상태 저장
+    };
+    reader.onerror = () => {
+      alert("파일 읽기에 실패했습니다.");
+    };
+    reader.readAsText(file);
+  }  
+
+  // Monaco Editor의 내용을 상태로 저장
+  const handleEditorChange = (value) => { setKeyword(value); }
+
   // 번역 요청
   const handleTranslate = async () => {
     if (!keyword.trim()) return alert("번역할 텍스트를 입력해주세요.");
     try {
       const response = await axios.get("/api/code", {
         params: { origin: keyword.trim(), language }, // 서버에 보낼 쿼리 파라미터
-      });
+      }); // 서버에 보낼 쿼리 파라미터
       const newTranslation = { original: keyword, translated: response.data, language };
 
       setTranslation(response.data); // 서버에서 반환된 번역 결과 저장
-      updateHistory(newTranslation); // 히스토리 업데이트
+      setHistorys(updateHistory(newTranslation, historys)); // 히스토리 업데이트
     } catch (error) {
       console.error("번역 오류: ", error.response?.data || error.message);
       setTranslation("번역에 실패했습니다."); // 오류 메시지 처리
     }
   };
+
+  // 선택된 기록을 기록에디터에 반영
+  const applySelectedHistory = () => {
+    if (selectedItem) {
+      setHistoryKeyword(selectedItem.original);
+      setHistoryTranslation(selectedItem.translated);
+      setIsModalOpen(false);
+      setIsHistoryDivOpen(true); // 기록 선택 시 HistoryDiv 활성화
+    } else { alert("기록을 선택해주세요!"); }
+  };  
+  
+  const saveTranslation = async () => {
+    if (!selectedItem) {
+      alert("저장할 기록을 먼저 선택하세요.");
+      return;
+    }
+    const confirmed = window.confirm("선택한 기록을 저장하시겠습니까?");
+    if (!confirmed) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+
+      let historyTitle = window.prompt("(선택) 제목을 입력하세요.");
+      if (!historyTitle) {
+        historyTitle = (historyKeyword || keyword).slice(0,30) + "..."; // 기본 제목 설정값
+      }
+
+      const dataToSave = {
+        requestCode: historyKeyword || keyword, // 원본 코드
+        responseCode: historyTranslation || translation, // 번역 결과
+        typeCode: language, // 번역 언어
+        historyTitle: historyTitle // 저장할 번역 기록 제목
+      };
+      if (!dataToSave.requestCode || !dataToSave.responseCode) {
+        alert("저장할 번역 데이터가 없습니다.");
+        return;
+      }
+
+      // 저장 요청
+      await axios.post("/api/history", dataToSave,
+        { headers: { Authorization: `Bearer ${token}` }} // JWT 토큰 포함
+      );
+      alert("기록이 저장되었습니다.");
+    } catch (e) {
+      alert("저장 실패");
+      console.error("기록 저장 실패: ", e);
+    }
+  }  
 
   // 클릭된 번역 이벤트
   useEffect(() => {
@@ -105,54 +178,26 @@ function TranslateComponent() {
     setSelectedItem(item); // 선택된 항목 저장
   };
 
-  // 선택된 기록을 기록에디터에 반영
-  const applySelectedHistory = () => {
-    if (selectedItem) {
-      setHistoryKeyword(selectedItem.original);
-      setHistoryTranslation(selectedItem.translated);
-      closeModal();
-    } else {
-      alert("기록을 선택해주세요!");
-    }
-  };
 
-  const saveTranslation = async () => {
-    const confirmed = window.confirm("선택한 기록을 저장하시겠습니까?");
-    if (!confirmed) return;
 
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        alert("로그인이 필요합니다.");
-        return;
+
+  // 초기 설정: IP 정보 및 히스토리 로드 && 클릭 외부 이벤트 핸들링
+  useEffect(() => {
+    fetchIpInfo(); // 컴포넌트 마운트 시 IP 정보 가져오기
+    setHistorys(fetchHistory);
+    const handleOutsideClick = (event) => {
+      if (
+        !event.target.closest('.content-mid-translateDiv-left') && 
+        !event.target.closest('.content-mid-translateDiv-right')
+      ) {
+        setActiveDiv(null);
       }
-
-      let historyTitle = window.prompt("(선택) 제목을 입력하세요.");
-      if (!historyTitle) {
-        historyTitle = (historyKeyword || keyword).slice(0,30) + "..."; // 기본 제목 설정값
-      }
-
-      const dataToSave = {
-        requestCode: historyKeyword || keyword, // 원본 코드
-        responseCode: historyTranslation || translation, // 번역 결과
-        typeCode: language, // 번역 언어
-        historyTitle: historyTitle // 저장할 번역 기록 제목
-      };
-      if (!dataToSave.requestCode || !dataToSave.responseCode) {
-        alert("저장할 번역 데이터가 없습니다.");
-        return;
-      }
-
-      // 저장 요청
-      await axios.post("/api/history", dataToSave,
-        { headers: { Authorization: `Bearer ${token}` }} // JWT 토큰 포함
-      );
-      alert("기록이 저장되었습니다.");
-    } catch (e) {
-      alert("저장 실패");
-      console.error("기록 저장 실패: ", e);
-    }
-  }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick); // 컴포넌트 언마운트 시 이벤트 제거
+    };
+  }, []);
 
   const downloadTranslation = async () => {
     const confirmed = window.confirm("현재 번역 기록을 다운로드 하시겠습니까?");
@@ -185,28 +230,8 @@ function TranslateComponent() {
     }
   }
 
-  // 파일 업로드 처리 함수
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
 
-    const validExtensions = ['java', 'js', 'txt', 'py']; // 업로드 허용한 파일 확장자
-    const fileExtension = file.name.split('.').pop().toLowerCase();
 
-    if (!validExtensions.includes(fileExtension)) {
-      alert("첨부할 수 있는 확장자 파일이 아닙니다.");
-      return;
-    }
-    // 파일 내용을 읽어와 'keyword' 상태에 저장
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setKeyword(e.target.result); // 파일 내용을 상태 저장
-    };
-    reader.onerror = () => {
-      alert("파일 읽기에 실패했습니다.");
-    };
-    reader.readAsText(file);
-  }
   return (
     <div className="content-all">
       <div className="content-top-buttonDiv">

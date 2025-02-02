@@ -5,8 +5,8 @@ import './App.css';
 /* 컴포넌트 IMPORT */
 import Header from './TEC/Header'; //Header항상 상단에 고정
 import TranslateComponent from './TEC/TranslateComponent';
-import CodeManagement from './TEC/Admin/CodeManagement';
-import Faq from './TEC/Admin/Faq';
+import CodeManagement from './TEC/Admin/AdminComponent/CodeManagement';
+import Faq from './TEC/Admin/AdminComponent/Faq';
 import UserSupportList from './TEC/UserSupport/UserSupportList';
 import UserSupportForm from './TEC/UserSupport/UserSupportForm';
 import UserSupportDetail from './TEC/UserSupport/UserSupportDetail';
@@ -18,6 +18,7 @@ import PasswordChange from './TEC/User/PasswordChange';
 import Profile from './TEC/User/Profile';
 import SavedHistoryList from './TEC/User/SavedHistoryList';
 import SavedHistoryDetail from './TEC/User/SavedHistoryDetail';
+import AdminPage from './TEC/Admin/AdminPage';
 
 
 
@@ -27,7 +28,7 @@ const App = () => {
 
   useEffect(() => {
     // localStorage에서 사용자 정보 로드
-    const storedUser = localStorage.getItem("username");
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(storedUser);
     }
@@ -40,7 +41,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<TranslateComponent />} />
           <Route path="/Admin/CodeManagement" element={<CodeManagement />} />
-          <Route path="/Admin/Faq" element={<Faq />} />
+          <Route path="/Admin/AdminComponent/Faq" element={<Faq />} />
           <Route path="/UserSupportList" element={<UserSupportList />} />
           <Route path="/UserSupportForm" element={<UserSupportForm />} />
           <Route path="/UserSupportDetail" element={<UserSupportDetail />} />
@@ -52,6 +53,7 @@ const App = () => {
           <Route path="/User/Profile" element={<Profile />} />
           <Route path="/User/savedHistoryList" element={<SavedHistoryList />} />
           <Route path="/User/savedHistoryDetail/:id" element={<SavedHistoryDetail />} />
+          <Route path="/Admin/AdminPage" element={<AdminPage />} />
         </Routes>
       </div>
     </div>

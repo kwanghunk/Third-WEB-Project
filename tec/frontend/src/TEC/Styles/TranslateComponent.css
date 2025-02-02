@@ -1,6 +1,5 @@
 /* 콘텐츠 전체 */
 .content-all {
-  margin-top: 10px;
   padding: 30px;
   font-family: 'Freesentation';
 }
@@ -8,9 +7,9 @@
 /* 콘텐츠 상단 버튼 전체 */
 .content-top-buttonDiv {
   display: flex;
-  padding: 10px;
   justify-content: right;
-  margin: 0 20px;
+  margin: 0 45px;
+  align-items: center;
 }
 
 /* 개발언어 JAVA등 전체, 다운로드,저장 버튼 각각 */
@@ -25,6 +24,7 @@
   border-radius: 5px;
   cursor: pointer;
   padding: 6px 16px;
+  font-size: 12px;
 }
 
 /* 버튼 호버 시 색상 변경 */
@@ -70,7 +70,9 @@
 
 /* 클릭 상태 */
 .content-mid-translateDiv-left.active,
-.content-mid-translateDiv-right.active {
+.content-mid-translateDiv-right.active,
+.content-bottom-historyDiv-left.active,
+.content-bottom-historyDiv-right.active {
   border-color: #6841ea;
 }
 
@@ -97,11 +99,6 @@
   font-weight: 800;
 }
 
-/* 번역 버튼 */
-.content-buttom-translateBtn {
-  margin-top: 10px;
-  padding: 10px;
-}
 
 /* 번역 버튼 */
 .translate-Btn {
@@ -113,7 +110,8 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  padding: 6px 16px;
+  margin-top: 10px;
+  padding: 10px;
 }
 
 .translate-Btn:hover {
@@ -134,4 +132,9 @@
 }
 .historys-item.active {
   background: #c9c9c9;
+}
+
+.text {
+  font-family: 'Freesentation';
+  font-size: 50px;
 }

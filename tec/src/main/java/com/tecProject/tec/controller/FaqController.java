@@ -64,9 +64,9 @@ public class FaqController {
     @PostMapping("/Admin/faqs")
     public ResponseEntity<String> addFaq(@RequestBody Faq faq, @RequestHeader("Authorization") String token) {
         try {
-            // JWT에서 사용자 이름 추출
+            //JWT에서 사용자 이름 추출
         	String username = jwtUtil.getUsername(token.replace("Bearer ", ""));
-        	// FAQ 추가
+        	//FAQ 추가
         	faqService.submitFaq(faq, username);
             return ResponseEntity.ok("FAQ 추가 성공");
         } catch (SecurityException e) {

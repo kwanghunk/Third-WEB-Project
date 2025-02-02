@@ -90,13 +90,14 @@ public class SecurityConfig {
 	            .requestMatchers(
 	            				 "/api/code/**",
 	            				 "/api/history/**",
-	            			     "/admin/code/**", "/ip/check-ip", 
+	            			     "/admin/code/**", "/ip/check-ip", "/guest-clicks","/guest-clicks/increment",
 	            			     "/user/**", "/admin/faqs", 
 	            			     "/api/user-support/**", 
 	            			     "/join/**","/faq/faqs",
-	            			     "/faq/**","/faq/check-admin")
+	            			     "/faq/**","/faq/check-admin",
+	            				 "/statistics/**")
 	            .permitAll() // 접근 할 수 있는 URL
-	            .requestMatchers("/admin/**","/Admin/faqs").hasRole("ADMIN") // 관리자 전용 API
+	            .requestMatchers("/admin/**","/Admin/**").hasRole("ADMIN") // 관리자 전용 API
 	            .anyRequest().authenticated() //위에서 허용하지 않은 나머지 요청은 로그인해야 접근 가능
 	        );
         
@@ -112,8 +113,7 @@ public class SecurityConfig {
         	//JWT 토근 사용으로 세션정책 STATELESS 설정(JWT 사용시 준필수)
         	.sessionManagement(session -> session
         			.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-     
-
+    
         return http.build(); // 설정완료 후 반환
     }
 }

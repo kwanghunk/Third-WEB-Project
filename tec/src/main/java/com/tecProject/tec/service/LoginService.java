@@ -36,17 +36,18 @@ public class LoginService {
 			throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
 		}
 		
-		String token = jwtUtil.createJwt(user.getUsername(), user.getUserType(), 3600000L);
+		String accesstoken = jwtUtil.createAccessToken(user.getUsername(), user.getUserType());
+		String refreshtoken = jwtUtil.createRefreshToken(user.getUsername(), user.getUserType());
 		
 		Map<String, String> response = new HashMap<>();
-		response.put("token", token);
+		response.put("accesstoken", accesstoken);
+		response.put("refreshtoken", refreshtoken);
 		response.put("username", user.getUsername());
 		response.put("userType", user.getUserType());
-		response.put("isMember", user.getIsMember() != null && user.getIsMember() ? "true" : "false");
-		System.out.println("token: " + token);
+		System.out.println("accesstoken: " + accesstoken);
+		System.out.println("refreshtoken: " + refreshtoken);
 		System.out.println("username: " + user.getUsername());
 		System.out.println("userType: " + user.getUserType());
-		System.out.println("isMember: " + user.getIsMember());
 		return response;
 	}
 }
