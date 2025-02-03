@@ -1,5 +1,8 @@
 package com.tecProject.tec.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,15 +43,15 @@ public class TranslationController {
     //회원/비회원 요청 조회 API
     @GetMapping("/clicks")
     public ResponseEntity<Map<String, Integer>> getRequestCount(
-            @RequestHeader(value = "Authorization", required = false) String token,
+            @RequestHeader(value = "Authorization", required = false) String accessToken,
             HttpServletRequest request
     ) {
         try {
             //회원 여부 확인
-            boolean isMember = (token != null && token.startsWith("Bearer "));
+            boolean isMember = (accessToken != null && accessToken.startsWith("Bearer "));
 
             //요청 횟수 조회
-            int clickCount = ipService.getRequestCount(request, token, isMember);
+            int clickCount = ipService.getRequestCount(request, accessToken, isMember);
 
             Map<String, Integer> response = new HashMap<>();
             response.put("clickCount", clickCount);
@@ -63,15 +66,15 @@ public class TranslationController {
     //회원/비회원 요청 증가 API
     @PostMapping("/increment-clicks")
     public ResponseEntity<String> incrementClicks(
-            @RequestHeader(value = "Authorization", required = false) String token,
+            @RequestHeader(value = "Authorization", required = false) String accessToken,
             HttpServletRequest request
     ) {
         try {
             //회원 여부 확인
-            boolean isMember = (token != null && token.startsWith("Bearer "));
+            boolean isMember = (accessToken != null && accessToken.startsWith("Bearer "));
 
             //요청 가능 여부 확인 및 증가
-            boolean allowed = ipService.isRequestAllowed(request, isMember);
+            boolean allowed = ipService.isRequestAllowed(request, accessToken, isMember);
             if (!allowed) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("요청 제한 초과");
             }

@@ -22,12 +22,12 @@ public class IpController {
 	//회원/비회원 확인 후 Ip반환
     @GetMapping("/check-ip")
     public ResponseEntity<String> checkIpAndMembership(
-            @RequestHeader(value = "Authorization", required = false) String token,
+            @RequestHeader(value = "Authorization", required = false) String accessToken,
             HttpServletRequest request
     ) {
         try {
             // 서비스 계층에 로직 위임
-            String result = ipService.checkMembershipAndIp(token, request);
+            String result = ipService.checkMembershipAndIp(accessToken, request);
             return ResponseEntity.ok(result);
 
         } catch (Exception e) {

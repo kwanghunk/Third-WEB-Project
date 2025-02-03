@@ -40,19 +40,11 @@ public class FaqController {
         return ResponseEntity.ok(faqs);
     }
     
-//    // 특정 FAQ 가져오기
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<Faq> getFaqById(@PathVariable Long id) {
-//        Optional<Faq> faq = faqService.findFaqById(id); // 수정된 findById 호출
-//        return faq.map(ResponseEntity::ok)
-//                  .orElse(ResponseEntity.notFound().build());
-//    }
-    
     //관리자 권한 확인
     @GetMapping("/check-admin")
-    public ResponseEntity<String> checkAdminStatus(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<String> checkAdminStatus(@RequestHeader("Authorization") String accessToken) {
         try {
-            String username = jwtUtil.getUsername(token.replace("Bearer ", ""));
+            String username = jwtUtil.getUsername(accessToken.replace("Bearer ", ""));
             boolean isAdmin = faqService.isAdmin(username);
             return ResponseEntity.ok(isAdmin ? "ROLE_ADMIN" : "Not Admin");
         } catch (Exception e) {
@@ -62,10 +54,10 @@ public class FaqController {
     
     //FAQ 추가 (관리자 권한 확인 포함)
     @PostMapping("/Admin/faqs")
-    public ResponseEntity<String> addFaq(@RequestBody Faq faq, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<String> addFaq(@RequestBody Faq faq, @RequestHeader("Authorization") String accessToken) {
         try {
             //JWT에서 사용자 이름 추출
-        	String username = jwtUtil.getUsername(token.replace("Bearer ", ""));
+        	String username = jwtUtil.getUsername(accessToken.replace("Bearer ", ""));
         	//FAQ 추가
         	faqService.submitFaq(faq, username);
             return ResponseEntity.ok("FAQ 추가 성공");

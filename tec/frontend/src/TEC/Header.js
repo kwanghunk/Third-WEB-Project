@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import React from "react";
+import axios from "axios";
 import {jwtDecode} from "jwt-decode";
 
 import './Styles/Header.css';
@@ -18,21 +19,84 @@ function Header({ user, setUser }) {
     navigate('/');
   };
 
-  // JWT를 통해 상태 복구
+  // 엑세스 토큰 갱신 함수
+  const refreshAccessToken = useCallback(async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+
+      if (!refreshToken) {
+        alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+        localStorage.clear();
+        navigate("/User/Login");
+        return;
+      }
+
+      const response = await axios.post("/user/refresh", {
+        refreshToken: `Bearer ${refreshToken}`,
+      });
+
+      console.log("🔍 토큰 갱신 응답 데이터:", response.data);
+
+      const newAccessToken = response.data.accesstoken || response.data.accessToken;
+
+      if (!newAccessToken) {
+        console.error("🚨 서버에서 새로운 액세스 토큰을 받지 못했습니다.");
+        alert("토큰 갱신 실패. 다시 로그인해주세요.");
+        localStorage.clear();
+        navigate("/User/Login");
+        return;
+      }
+
+      console.log("새로운 Access Token:", newAccessToken);
+
+      localStorage.setItem("accessToken", newAccessToken);
+      localStorage.setItem("tokenExpiry", jwtDecode(newAccessToken).exp * 1000);
+
+      alert("세션이 연장되었습니다.");
+    } catch (error) {
+      alert("토큰 갱신 실패. 다시 로그인해주세요.");
+      localStorage.clear();
+      navigate("/User/Login");
+    }
+  }, [navigate]);
+
+  // 로그인 상태 복구 및 토큰 만료 체크
   useEffect(() => {
-    const accesstoken = localStorage.getItem("accessToken"); // JWT 토큰 가져오기
+    const accesstoken = localStorage.getItem("accessToken");
+
     if (accesstoken) {
       try {
-        const decodedToken = jwtDecode(accesstoken); // JWT 디코딩
+        const decodedToken = jwtDecode(accesstoken);
         setUser({
           username: decodedToken.username,
           userType: decodedToken.userType,
         });
+
+        const tokenExpiry = decodedToken.exp * 1000; // 🔥 만료 시간 설정
+
+        const interval = setInterval(() => {
+          console.log("현재 시간:", Date.now());
+          console.log("토큰 만료 시간:", tokenExpiry);
+
+          if (Date.now() > tokenExpiry) {
+            console.log("액세스 토큰 만료됨! 로그인 연장 여부 확인");
+            const extendSession = window.confirm("로그인 연장하시겠습니까?");
+            if (extendSession) {
+              refreshAccessToken();
+            } else {
+              localStorage.clear();
+              setUser(null);  // 🔥 헤더에서도 즉시 반영
+              navigate("/User/Login");
+            }
+          }
+        }, 10000); // 🔥 10초마다 실행
+
+        return () => clearInterval(interval);
       } catch (error) {
         console.error("JWT 디코딩 실패:", error);
       }
     }
-  }, [setUser]);
+  }, [setUser, navigate, refreshAccessToken]);
 
   return (
     <header className="header-all">

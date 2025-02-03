@@ -50,7 +50,7 @@ public class JWTUtil {
 	}
 	
 	public String createAccessToken(String username, String userType) {
-		long accessTokenExpiration = 10 * 1000; //1분
+		long accessTokenExpiration = 10 * 1000; //10초
 		return Jwts.builder()
 				.claim("username", username)
 				.claim("userType", userType)

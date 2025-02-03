@@ -33,18 +33,18 @@ public class IpService {
     private static final long RATE_LIMIT_TIME_WINDOW = 30L * 24 * 60 * 60; // 한 달(초 단위)
 	
     //회원/비회원/관리자 확인 후 Ip 반환
-    public String checkMembershipAndIp(String token, HttpServletRequest request) {
+    public String checkMembershipAndIp(String accessToken, HttpServletRequest request) {
 		String username = "비회원"; //기본값: 비회원
 		String userType = "ROLE_GUEST"; //기본값: 비회원 역할
 		boolean isMember = false; //기본값: 비회원
 		boolean isAdmin = false; // 기본값: 관리자 아님
 		
 		//1. JWT 토큰 검증 및 사용자 정보 추출
-		if (token != null && token.startsWith("Bearer ")) {
+		if (accessToken != null && accessToken.startsWith("Bearer ")) {
 			try {
-				token = token.replace("Bearer ", "");
-				username = jwtUtil.getUsername(token); //사용자 이름 추출
-	            userType = jwtUtil.getRole(token); //사용자 역할 추출
+				accessToken = accessToken.replace("Bearer ", "");
+				username = jwtUtil.getUsername(accessToken); //사용자 이름 추출
+	            userType = jwtUtil.getRole(accessToken); //사용자 역할 추출
 	            isAdmin = "ROLE_ADMIN".equals(userType); // 관리자 여부 확인
 	            isMember = isAdmin || "ROLE_USER".equals(userType); // 회원 여부 확인 (관리자 포함)
 	            } catch (Exception e) {
@@ -71,10 +71,10 @@ public class IpService {
     }
     
     //회원/비회원만 요청 제한 확인(관리자는 무제한)
-    public boolean isRequestAllowed(HttpServletRequest request, boolean isMember) {
+    public boolean isRequestAllowed(HttpServletRequest request, String accessToken, boolean isMember) {
         // 회원 여부에 따라 식별자 결정
         String ipAddress = isMember
-                ? jwtUtil.getUsername(request.getHeader("Authorization").replace("Bearer ", ""))
+                ? jwtUtil.getUsername(accessToken.replace("Bearer ", ""))
                 : ipUtil.getClientIp(request);
 
         //Redis에서 사용할 키 생성
@@ -108,13 +108,13 @@ public class IpService {
     }
 
     //요청 횟수 조회 메서드
-    public int getRequestCount(HttpServletRequest request, String token, boolean isMember) {
+    public int getRequestCount(HttpServletRequest request, String accessToken, boolean isMember) {
         String ipAddress;
 
         //회원 여부에 따라 식별자 결정
         if (isMember) {
             //JWT 토큰에서 사용자 이름 추출
-        	ipAddress = jwtUtil.getUsername(token.replace("Bearer ", ""));
+        	ipAddress = jwtUtil.getUsername(accessToken.replace("Bearer ", ""));
         } else {
             //클라이언트 IP 주소 추출
         	ipAddress = ipUtil.getClientIp(request);

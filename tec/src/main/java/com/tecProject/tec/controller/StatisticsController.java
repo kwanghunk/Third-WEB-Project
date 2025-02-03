@@ -21,12 +21,6 @@ public class StatisticsController {
 	public StatisticsController(StatisticsService statisticsService) {
 		this.statisticsService = statisticsService;
 	}
-
-    //전체 방문자 통계 데이터를 반환하는 API
-//    @GetMapping("/all")
-//    public ResponseEntity<Map<String, Integer>> getAllVisitorStatistics() {
-//        return ResponseEntity.ok(statisticsService.getVisitorStatistics());
-//    }
 	
 	//날짜별 전체 방문자 통계를 반환하는 API
 	@GetMapping("/all")

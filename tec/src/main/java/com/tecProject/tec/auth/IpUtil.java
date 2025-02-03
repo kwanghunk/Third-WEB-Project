@@ -41,20 +41,20 @@ public class IpUtil {
 	   
     // JWT에서 사용자 이름 가져오기
     public String getUsernameFromToken(HttpServletRequest request) {
-        String token = getTokenFromRequest(request);
-        return jwtUtil.getUsername(token);
+        String accessToken = getTokenFromRequest(request);
+        return jwtUtil.getUsername(accessToken);
     }
 
     // JWT에서 역할(회원/비회원) 가져오기
     public String getRoleFromToken(HttpServletRequest request) {
-        String token = getTokenFromRequest(request);
-        return jwtUtil.getRole(token);
+        String accessToken = getTokenFromRequest(request);
+        return jwtUtil.getRole(accessToken);
     }
 
     // JWT 토큰 만료 여부 확인
     public boolean isTokenExpired(HttpServletRequest request) {
-        String token = getTokenFromRequest(request);
-        return jwtUtil.isTokenExpired(token);
+        String accessToken = getTokenFromRequest(request);
+        return jwtUtil.isTokenExpired(accessToken);
     }
 
     // HTTP 요청에서 JWT 토큰 추출
