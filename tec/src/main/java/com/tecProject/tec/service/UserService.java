@@ -42,23 +42,6 @@ public class UserService {
 
         return userRepository.save(existingUser);
     }
-    /*
-    public boolean changePassword(String username, String currentPassword, String newPassword) {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new IllegalArgumentException("User not found"); // 사용자 없을 경우 예외 처리
-        }
-
-        // 현재 비밀번호 확인
-        if (!user.getPassword().equals(currentPassword)) {
-            return false; // 비밀번호가 맞지 않을 경우 false 반환
-        }
-
-        // 비밀번호 변경
-        user.setPassword(newPassword);
-        userRepository.save(user);
-        return true;
-    }*/
     
     public boolean changePassword(String username, String currentPassword, String newPassword) {
         User user = userRepository.findByUsername(username);

@@ -1,7 +1,6 @@
-
 import React, { useState } from "react";
 import axios from "axios";
-import "../Styles/CodeManagement.css";
+import "../AdminStyles/CodeManagement.css";
 
 function CodeManagement() {
   const [keyword, setKeyword] = useState(""); // 입력 또는 수정할 키워드

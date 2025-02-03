@@ -1,8 +1,8 @@
 /* 전체 */
 .header-all {
   display:flex; 
-  margin: 0 20px;
-  height: 40px;
+  margin: 0 70px;
+  height: 60px;
   top: 0; /* 상단에 고정 */
   position: sticky; /* 스크롤 시에도 고정되도록 설정 */
   z-index: 1000; /* 다른 요소 위에 표시되도록 설정 */
@@ -27,13 +27,13 @@
   display: flex;
   position: fixed; /* 부모플렉스박스 무시 */
   left: 50%; /*가운데 정렬하고 보정*/
-  transform: translate(-50%);
+  transform: translate(-250%);
   align-items: center;
 }
 
 /* 메뉴 각각 */
 .nav-menu-content {
-  margin: 0 50px;
+  margin: 0 20px;
   font-weight: 600;
   font-size: 16px;
 }

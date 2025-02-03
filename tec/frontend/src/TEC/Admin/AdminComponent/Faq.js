@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FaqForm from './FaqForm';
-import '../Styles/Faq.css';
+import "../AdminStyles/Faq.css";
 
 function Faq() {
   const [faqs, setFaqs] = useState([]); // FAQ 목록
@@ -14,7 +14,7 @@ function Faq() {
   // 관리자 여부 확인
   const checkAdminStatus = async () => {
     try {
-      const response = await axios.get('/faq/check-admin', {
+      const response = await axios.get('/faq/check/admin', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`, // 토큰을 로컬 스토리지에서 가져옴
         },

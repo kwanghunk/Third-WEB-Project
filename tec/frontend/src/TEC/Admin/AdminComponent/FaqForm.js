@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../Styles/Faq.css';
+import "../AdminStyles/Faq.css";
 
 function FaqForm() {
   const [question, setQuestion] = useState(''); // 질문 내용
@@ -21,7 +21,7 @@ function FaqForm() {
       // FAQ 등록 API 호출
       const token = localStorage.getItem('token');
 
-      const response = await axios.post('/faq/Admin/faqs', newFaq, {
+      const response = await axios.post('/faq/admin/faqs', newFaq, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`, // JWT 토큰 포함
         },

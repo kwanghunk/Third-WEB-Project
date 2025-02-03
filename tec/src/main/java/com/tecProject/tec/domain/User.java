@@ -36,11 +36,6 @@ public class User {
 		@Column(name = "USER_TYPE", nullable = false)
 		private String userType;
 		
-		//로그인여부 (true = 회원, false = 비회원 : 회원 무조건 1 반환) *IP때문에 추가
-		@Builder.Default //빌더초기화해제
-		@Column(name = "IS_MEMBER", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
-		private Boolean isMember = true;
-		
 		//사용자 아이디
 		@Column(name = "USER_NAME", nullable = false, unique = true, length = 50)
 		private String username;
@@ -74,7 +69,7 @@ public class User {
 		//주민등록번호 앞자리
 	    @Column(name = "SSN_FIRST", nullable = false, length = 6)
 	    private String ssnFirst;
-
+	
 	    //주민등록번호 뒷자리
 	    @Column(name = "SSN_SECOND", nullable = false, length = 7)
 	    private String ssnSecond;
