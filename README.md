@@ -27,10 +27,13 @@
 
 # 🙋‍♀️ 최서진 : 
 <ul>
-  <li>추</li>
-  <li>가</li>
-  <li>예</li>
-  <li>정</li>
+  <li><b>데이터베이스 설계:</b> 프로젝트 핵심 데이터 관리 및 번역 데이터 구축.</li>
+  <li><b>Spring Security 설정 & JWT 구현:</b> 강화된 Security (accessToken,refreshToken)</li> 
+  <li><b>코드 번역 API(공동작업):</b> 입력된 코드 형식을 유지하며 기본 자료형, 메소드, 상수를 변환.</li>
+  <li><b>FAQ:</b> 작성/수정/삭제/페이지네이션</li>
+  <li><b>IP:</b> DB설계 및 저장, IP 정보관리, 클라이언트 IP주소 가져오기, 비회원 → IP 회원 → JWT를 바탕으로 번역기능 요청 제한 API구현, 방문자수 차트화</li>
+  <li><b>jwtDecode:</b> JWT 디코딩 사용자 정보 저장, 로그인 헤더에서 로그인 상태 유지 설정, accessToken만료시 refreshAccessToken 새JWT 디코딩하여 갱신</li>
+  <li><b>디자인:</b> 로고 디자인 및 메인 페이지 프론트 작업</li>
 </ul>
 
 # 🙋‍♂️ 김현규 : 
