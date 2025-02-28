@@ -1,4 +1,4 @@
-# 🧩 DECOBET(TEC Project) - 주니어 개발자를 위한 코드 번역기
+# 🧩 DECOBET(Third-WEB-Project) - 주니어 개발자를 위한 코드 번역기
 
 ## 프로젝트 소개
 <ul>
