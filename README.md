@@ -10,7 +10,7 @@
 
 ### ⭐ 팀장: 김광훈 | 팀원 : 최서진, 김현규 |
 
-### 📅 프로젝트 기간 : 2024년 12월 23일 ~ 2025년 01월 24일
+### 📅 프로젝트 기간 : 2024년 12월 23일 ~ 2025년 01월 24일(조기 종료 - 미완성)
 
 ### 담당 기능
 # 🙋‍♂️ 김광훈
@@ -25,7 +25,7 @@
   <li><b>코드 검색:</b> 키워드 기반 번역 결과 검색 기능 제공.</li>
 </ul>
 
-# 🙋‍♀️ 최서진 : 
+# 🙋‍♀️ 최서진 
 <ul>
   <li><b>데이터베이스 설계:</b> 프로젝트 핵심 데이터 관리 및 번역 데이터 구축.</li>
   <li><b>Spring Security 설정 & JWT 구현:</b> 강화된 Security (accessToken,refreshToken)</li> 
@@ -36,7 +36,7 @@
   <li><b>디자인:</b> 로고 디자인 및 메인 페이지 프론트 작업</li>
 </ul>
 
-# 🙋‍♂️ 김현규 : 
+# 🙋‍♂️ 김현규 
 <ul>
   <li><b>회원가입:</b> 아이디, 이메일 중복검사 및 비밀번호 일치여부 확인 후 회원가입 기능</li>
   <li><b>로그인:</b> 입력된 아이디, 비밀번호를 통한 로그인 기능</li>
@@ -69,9 +69,6 @@
 </div>
 <div> 
   <img src="https://img.shields.io/badge/chartdotjs-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white" alt="chartdotjs">
-  <img src="https://img.shields.io/badge/openai-412991?style=for-the-badge&logo=openai&logoColor=white" alt="openai"> 
-  <img src="https://img.shields.io/badge/auth0-EB5424?style=for-the-badge&logo=auth0&logoColor=white" alt="auth0"> 
-  <img src="https://img.shields.io/badge/json-000000?style=for-the-badge&logo=json&logoColor=white" alt="json"> 
 </div>
 
 
@@ -83,31 +80,10 @@
 
 ### ⭐기능구현
 <ul>
-  <li>추</li>
-  <li>가</li>
-  <li>예</li>
-  <li>정</li> 
-</ul>
-
-### 🚨개발 이슈(1)
-#### 발견🔍 : 
-#### 과정🛠️ : 
-#### 해결✅ : 
-
-### 🚨개발 이슈(2)
-#### 발견🔍 : 
-#### 과정🛠️ : 
-#### 해결✅ : 
-
----
-
-### 예약 확인
-이미지 추가 예정
-
-### ⭐기능구현
-<ul>
-  <li></li>
-  <li></li>
+  <li><b>코드 번역 기능:</b> 사용자가 입력하거나 업로드한 소스 코드의 원래 형식올 보존하며 기본 자료형, 메소드, 상수 등을 분석하 한글로 변환 </li>
+  <li><b>번역기록 조회:</b> 사용자의 번역 기록을 세션 스토리지에 저장하여 조회, 저장하여 이전 번역내역을 확인 가능</li>
+  <li><b>번역기록 저장:</b> 특정 번역 결과를 저장해두고 필요할 때 재사용할 수 있도록 지원</li>
+  <li><b>번역 결과 다운로드:</b> 번역된 코드 및 원본 코드를 TXT 파일 형식으로 다운로드 가능</li>
 </ul>
 
 ---
